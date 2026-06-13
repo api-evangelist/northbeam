@@ -1,0 +1,9 @@
+{
+  "provider": "northbeam",
+  "blogURL": "https://www.northbeam.io/blog",
+  "rssURL": null,
+  "rssConfirmed": false,
+  "note": "No RSS/Atom feed detected on https://www.northbeam.io/blog as of 2026-06-13. The blog uses a filterable SPA layout with a newsletter subscription (The Media Buyer) but exposes no machine-readable feed endpoint.",
+  "lastChecked": "2026-06-13",
+  "posts": []
+}

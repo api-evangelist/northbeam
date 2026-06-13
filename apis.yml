@@ -80,6 +80,12 @@ common:
     url: rate-limits/northbeam-rate-limits.yml
   - type: FinOps
     url: finops/northbeam-finops.yml
+  - type: Vocabulary
+    url: vocabulary/northbeam-vocabulary.yml
+  - type: JSONLDContext
+    url: json-ld/northbeam-context.jsonld
+  - type: BlogPosts
+    url: blogs/blogs.json
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

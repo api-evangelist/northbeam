@@ -1,0 +1,273 @@
+vocabulary:
+  name: Northbeam API Vocabulary
+  description: Domain terms and concepts used across the Northbeam marketing attribution platform APIs.
+  url: https://northbeam.io/vocab
+  version: '1.0'
+  created: '2026-06-13'
+  modified: '2026-06-13'
+
+terms:
+
+  # -- Core Attribution Concepts --
+
+  - term: attribution
+    label: Attribution
+    definition: The process of assigning credit for a conversion or purchase to one or more marketing touchpoints in the customer journey.
+    related:
+      - multi_touch_attribution
+      - attribution_model
+      - attribution_window
+
+  - term: multi_touch_attribution
+    label: Multi-Touch Attribution (MTA)
+    definition: An attribution methodology that assigns fractional credit for conversions across multiple marketing interactions rather than a single touchpoint.
+    seeAlso: https://docs.northbeam.io/docs/orders-api
+
+  - term: attribution_model
+    label: Attribution Model
+    definition: A rule or algorithm that determines how conversion credit is distributed among marketing channels. Examples include last touch, first touch, linear, and clicks-only models.
+    field: id, name
+    exampleValues:
+      - Clicks only
+      - Clicks + Modeled Views
+      - Last touch
+      - First touch
+      - Linear
+
+  - term: attribution_window
+    label: Attribution Window
+    definition: The lookback period (in days) within which a touchpoint is eligible to receive credit for a conversion. Common values are 1, 7, and 30 days.
+    field: attribution_windows
+    exampleValues:
+      - '1'
+      - '7'
+      - '30'
+
+  - term: accounting_mode
+    label: Accounting Mode
+    definition: Determines when revenue is attributed — either at the time of order placement (accrual) or at the time payment is received (cash).
+    field: accounting_modes
+    exampleValues:
+      - accrual
+      - cash
+
+  # -- Orders API Terms --
+
+  - term: order_id
+    label: Order ID
+    definition: Unique identifier for an order. Must match the id passed to the Northbeam frontend firePurchaseEvent call. Same order_id overwrites prior records (idempotent).
+    api: northbeam:orders-api
+    field: order_id
+    type: string
+    required: true
+
+  - term: customer_id
+    label: Customer ID
+    definition: Unique identifier for the customer within the order management system. Used to link orders to a single customer for LTV calculations.
+    api: northbeam:orders-api
+    field: customer_id
+    type: string
+    required: true
+
+  - term: customer_email
+    label: Customer Email
+    definition: Email address of the customer placing the order. Used for cross-device identity resolution.
+    api: northbeam:orders-api
+    field: customer_email
+    type: string
+    required: true
+
+  - term: time_of_purchase
+    label: Time of Purchase
+    definition: ISO-8601 datetime (with timezone offset) representing when the order was placed. Must occur after the frontend pixel fire.
+    api: northbeam:orders-api
+    field: time_of_purchase
+    type: string (ISO-8601 datetime)
+    required: true
+
+  - term: purchase_total
+    label: Purchase Total
+    definition: Total monetary value of the order including tax, shipping, and fees, in the currency specified.
+    api: northbeam:orders-api
+    field: purchase_total
+    type: number
+    required: true
+
+  - term: order_tags
+    label: Order Tags
+    definition: Array of string tags categorizing the order. Required for offline orders and subscription purchases to route attribution correctly.
+    api: northbeam:orders-api
+    field: order_tags
+    type: array of strings
+    required: true
+
+  - term: products
+    label: Products
+    definition: Array of product objects in the order. Each must contain id, name, quantity, and price. Minimum one product required.
+    api: northbeam:orders-api
+    field: products
+    type: array of objects
+    required: true
+
+  - term: refunds
+    label: Refunds
+    definition: Optional array of refund objects. Each contains product_id, quantity, refund_amount, and refund_made_at fields.
+    api: northbeam:orders-api
+    field: refunds
+    type: array of objects
+    required: false
+
+  - term: customer_shipping_address
+    label: Customer Shipping Address
+    definition: Optional object containing the customer's shipping address. Enables regional LTV reporting within the Northbeam dashboard.
+    api: northbeam:orders-api
+    field: customer_shipping_address
+    type: object
+    required: false
+
+  - term: batch_limit
+    label: Batch Limit
+    definition: Maximum number of orders that may be submitted in a single API request. Northbeam Orders API allows up to 1,000 orders per request.
+    api: northbeam:orders-api
+    value: 1000
+
+  # -- Spend API Terms --
+
+  - term: platform_name
+    label: Platform Name
+    definition: Name of the advertising platform from which spend data originates. Used to map spend to UTM parameters for attribution alignment.
+    api: northbeam:spend-api
+    field: platform_name
+    type: string
+    required: true
+
+  - term: campaign_id
+    label: Campaign ID
+    definition: Unique identifier for the advertising campaign within the source platform.
+    api: northbeam:spend-api
+    field: campaign_id
+    type: string
+    required: true
+
+  - term: campaign_name
+    label: Campaign Name
+    definition: Name of the advertising campaign. Must match the utm_campaign parameter to correctly align spend with attribution data.
+    api: northbeam:spend-api
+    field: campaign_name
+    type: string
+    required: true
+
+  - term: spend
+    label: Spend
+    definition: Monetary amount spent on the campaign for the specified date, expressed in the currency given by spend_currency.
+    api: northbeam:spend-api
+    field: spend
+    type: number
+    required: true
+
+  - term: spend_currency
+    label: Spend Currency
+    definition: ISO-4217 currency code for the spend amount (e.g., USD, EUR).
+    api: northbeam:spend-api
+    field: spend_currency
+    type: string
+    required: true
+
+  - term: hourly_spend
+    label: Hourly Spend Record
+    definition: A single spend data point representing advertising expenditure for one campaign on one date. Northbeam Spend API accepts arrays of these records.
+    api: northbeam:spend-api
+
+  # -- Data Export API Terms --
+
+  - term: data_export
+    label: Data Export
+    definition: An asynchronous export job that packages attribution performance metrics into a downloadable CSV file.
+    api: northbeam:data-export-api
+
+  - term: level
+    label: Export Level
+    definition: Granularity dimension of the export. Determines whether results are broken down at the ad, campaign, platform, or account level.
+    api: northbeam:data-export-api
+    field: level
+    type: string
+    exampleValues:
+      - ad
+      - campaign
+      - platform
+
+  - term: time_granularity
+    label: Time Granularity
+    definition: Time unit used to aggregate exported data rows. Controls whether each row represents a day, week, or other period.
+    api: northbeam:data-export-api
+    field: time_granularity
+    type: string
+    exampleValues:
+      - DAILY
+      - WEEKLY
+
+  - term: period_type
+    label: Period Type
+    definition: Named date range for the export job. Provides a shorthand for common lookback windows such as yesterday or the last 30 days.
+    api: northbeam:data-export-api
+    field: period_type
+    type: string
+    exampleValues:
+      - YESTERDAY
+      - LAST_7_DAYS
+      - LAST_30_DAYS
+
+  - term: metric
+    label: Metric
+    definition: A quantitative performance indicator included in a data export. Metrics are identified by id and optionally relabeled. Examples include AOV, CAC, CPM, CTR, Revenue, and Spend.
+    api: northbeam:data-export-api
+    field: metrics[].id
+    exampleValues:
+      - rev
+      - spend
+      - aov
+      - cac
+      - cpm
+      - ctr
+
+  - term: breakdown
+    label: Breakdown
+    definition: A dimension used to segment export data. Each breakdown has a key and a list of values to filter by. Examples include Platform, Category, and Targeting.
+    api: northbeam:data-export-api
+    field: breakdowns
+
+  - term: export_status
+    label: Export Status
+    definition: Current processing state of a data export job.
+    api: northbeam:data-export-api
+    field: status
+    exampleValues:
+      - PENDING
+      - SUCCESS
+      - ERROR
+
+  - term: roas
+    label: ROAS (Return on Ad Spend)
+    definition: Return on ad spend — revenue generated divided by amount spent on advertising. A primary KPI tracked within Northbeam attribution reports.
+
+  - term: media_mix_modeling
+    label: Media Mix Modeling (MMM)
+    definition: Statistical modeling approach that uses historical spend and outcome data to estimate the contribution of each marketing channel to overall revenue, independent of cookie-based tracking.
+
+  - term: data_client_id
+    label: Data Client ID
+    definition: Account-level identifier provided by Northbeam alongside the API key. Required in the Data-Client-ID header on all API requests.
+    field: Data-Client-ID (HTTP header)
+    type: string
+
+  - term: cac
+    label: CAC (Customer Acquisition Cost)
+    definition: The total cost attributed to acquiring a single new customer, calculated as total spend divided by the number of new customers acquired.
+
+  - term: ltv
+    label: LTV (Lifetime Value)
+    definition: The projected total revenue a customer will generate over their relationship with the business. Northbeam supports regional LTV reporting when shipping address is provided.
+
+  - term: creative_analytics
+    label: Creative Analytics
+    definition: Performance data at the ad creative level, including metrics such as CTR, CPM, and revenue attribution broken down by individual creative assets.

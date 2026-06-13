@@ -1,0 +1,100 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nb": "https://northbeam.io/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hydra": "http://www.w3.org/ns/hydra/core#",
+
+    "orderId": { "@id": "nb:orderId", "@type": "xsd:string" },
+    "customerId": { "@id": "nb:customerId", "@type": "xsd:string" },
+    "customerEmail": { "@id": "nb:customerEmail", "@type": "xsd:string" },
+    "timeOfPurchase": { "@id": "nb:timeOfPurchase", "@type": "xsd:dateTime" },
+    "purchaseTotal": { "@id": "nb:purchaseTotal", "@type": "xsd:decimal" },
+    "tax": { "@id": "nb:tax", "@type": "xsd:decimal" },
+    "shippingCost": { "@id": "nb:shippingCost", "@type": "xsd:decimal" },
+    "currency": { "@id": "nb:currency", "@type": "xsd:string" },
+    "products": { "@id": "nb:products", "@container": "@list" },
+    "orderTags": { "@id": "nb:orderTags", "@container": "@list" },
+    "refunds": { "@id": "nb:refunds", "@container": "@list" },
+    "discountCodes": { "@id": "nb:discountCodes", "@container": "@list" },
+    "discountAmount": { "@id": "nb:discountAmount", "@type": "xsd:decimal" },
+    "variantId": { "@id": "nb:variantId", "@type": "xsd:string" },
+    "variantName": { "@id": "nb:variantName", "@type": "xsd:string" },
+
+    "platformName": { "@id": "nb:platformName", "@type": "xsd:string" },
+    "campaignId": { "@id": "nb:campaignId", "@type": "xsd:string" },
+    "campaignName": { "@id": "nb:campaignName", "@type": "xsd:string" },
+    "spend": { "@id": "nb:spend", "@type": "xsd:decimal" },
+    "spendCurrency": { "@id": "nb:spendCurrency", "@type": "xsd:string" },
+    "date": { "@id": "nb:date", "@type": "xsd:date" },
+
+    "attributionModels": { "@id": "nb:attributionModels", "@container": "@list" },
+    "attributionWindows": { "@id": "nb:attributionWindows", "@container": "@list" },
+    "accountingModes": { "@id": "nb:accountingModes", "@container": "@list" },
+    "metrics": { "@id": "nb:metrics", "@container": "@list" },
+    "breakdowns": { "@id": "nb:breakdowns", "@container": "@list" },
+    "level": { "@id": "nb:level", "@type": "xsd:string" },
+    "timeGranularity": { "@id": "nb:timeGranularity", "@type": "xsd:string" },
+    "periodType": { "@id": "nb:periodType", "@type": "xsd:string" },
+    "exportAggregation": { "@id": "nb:exportAggregation", "@type": "xsd:string" },
+    "removeZeroSpend": { "@id": "nb:removeZeroSpend", "@type": "xsd:boolean" },
+    "aggregateData": { "@id": "nb:aggregateData", "@type": "xsd:boolean" },
+    "includeIds": { "@id": "nb:includeIds", "@type": "xsd:boolean" },
+    "dataExportId": { "@id": "nb:dataExportId", "@type": "xsd:string" },
+    "exportStatus": { "@id": "nb:exportStatus", "@type": "xsd:string" },
+
+    "clientId": { "@id": "nb:clientId", "@type": "xsd:string" },
+    "apiKey": { "@id": "nb:apiKey", "@type": "xsd:string" },
+    "dataClientId": { "@id": "nb:dataClientId", "@type": "xsd:string" },
+
+    "NorthbeamOrder": "nb:NorthbeamOrder",
+    "NorthbeamProduct": "nb:NorthbeamProduct",
+    "NorthbeamRefund": "nb:NorthbeamRefund",
+    "NorthbeamSpendRecord": "nb:NorthbeamSpendRecord",
+    "NorthbeamDataExport": "nb:NorthbeamDataExport",
+    "NorthbeamAttributionModel": "nb:NorthbeamAttributionModel",
+    "NorthbeamMetric": "nb:NorthbeamMetric",
+    "NorthbeamBreakdown": "nb:NorthbeamBreakdown",
+
+    "OrdersAPI": "nb:OrdersAPI",
+    "SpendAPI": "nb:SpendAPI",
+    "DataExportAPI": "nb:DataExportAPI"
+  },
+  "@graph": [
+    {
+      "@id": "https://northbeam.io/",
+      "@type": "Organization",
+      "name": "Northbeam",
+      "url": "https://www.northbeam.io",
+      "description": "Multi-touch marketing attribution platform for e-commerce",
+      "nb:hasAPI": [
+        { "@id": "https://api.northbeam.io/v2/orders" },
+        { "@id": "https://api.northbeam.io/v1/spend" },
+        { "@id": "https://api.northbeam.io/v1/exports" }
+      ]
+    },
+    {
+      "@id": "https://api.northbeam.io/v2/orders",
+      "@type": "nb:OrdersAPI",
+      "name": "Northbeam Orders API",
+      "description": "Submit order and purchase data for attribution processing",
+      "documentation": "https://docs.northbeam.io/docs/orders-api",
+      "nb:basePath": "https://api.northbeam.io/v2/orders",
+      "nb:sandboxURL": "https://api-uat.northbeam.io/v2/orders"
+    },
+    {
+      "@id": "https://api.northbeam.io/v1/spend",
+      "@type": "nb:SpendAPI",
+      "name": "Northbeam Spend API",
+      "description": "Upload hourly spend records from non-integrated ad platforms",
+      "documentation": "https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms"
+    },
+    {
+      "@id": "https://api.northbeam.io/v1/exports",
+      "@type": "nb:DataExportAPI",
+      "name": "Northbeam Data Export API",
+      "description": "Export attribution performance metrics and creative analytics",
+      "documentation": "https://docs.northbeam.io/docs/northbeam-api-data-export-1"
+    }
+  ]
+}
