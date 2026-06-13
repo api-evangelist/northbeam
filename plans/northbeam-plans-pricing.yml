@@ -1,0 +1,61 @@
+name: Northbeam Plans and Pricing
+description: Pricing tiers for Northbeam's multi-touch attribution platform, structured around monthly media spend thresholds and feature access levels.
+specificationVersion: '0.1'
+url: https://www.northbeam.io/pricing
+plans:
+  - name: Starter
+    description: Entry-level multi-touch attribution plan for e-commerce brands with lower media spend. Includes Shopify direct integration, creative analytics, and unlimited users.
+    url: https://www.northbeam.io/pricing
+    price: 1500.00
+    unit: month
+    currency: USD
+    billingCycle: monthly
+    audience: Brands with under $1.5M annual media spend
+    features:
+      - Multi-Touch Attribution (MTA)
+      - Clicks + Deterministic Views
+      - Apex attribution intelligence
+      - Creative Analytics
+      - Correlation Analysis
+      - Shopify direct integration
+      - Unlimited integrations
+      - Unlimited user accounts
+      - Email support
+      - Product Analytics
+      - Profit Benchmarks
+  - name: Professional
+    description: Advanced attribution plan for scaling brands requiring multi-platform integrations, enhanced data refresh rates, and dedicated strategic support including API access.
+    url: https://www.northbeam.io/pricing
+    price: 0.00
+    unit: month
+    currency: USD
+    billingCycle: annual
+    audience: Brands with over $250k per month in media spend
+    contact: https://www.northbeam.io/pricing
+    features:
+      - All Starter features
+      - Direct integration with any ecommerce platform
+      - Dedicated Media Strategist
+      - Enhanced data refresh options
+      - Multi-region capability (optional)
+      - Technical support for custom storefronts
+      - API access (Data Export API)
+      - Advanced data exports
+  - name: Enterprise
+    description: Full-featured attribution platform with media mix modeling, dedicated success management, highest-frequency data refresh, and Slack-based support for large advertisers.
+    url: https://www.northbeam.io/pricing
+    price: 0.00
+    unit: month
+    currency: USD
+    billingCycle: annual
+    audience: Brands with over $500k per month in media spend
+    contact: https://www.northbeam.io/pricing
+    features:
+      - All Professional features
+      - Dedicated Customer Success Manager
+      - Enhanced Correlation Analysis (Metrics Explorer)
+      - Media Mix Modeling+ (optional)
+      - Direct Slack channel support
+      - Advanced data exports
+      - Highest-frequency data refresh rates
+      - Custom attribution configuration

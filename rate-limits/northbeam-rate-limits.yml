@@ -1,0 +1,65 @@
+name: Northbeam API Rate Limits
+description: Rate limits enforced across Northbeam's API surface including the Orders API, Spend API, and Data Export API.
+specificationVersion: '0.1'
+url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+limits:
+  - api: Data Export API
+    endpoint: /v1/exports/data-export
+    method: POST
+    requests: 60
+    window: minute
+    notes: Most restrictive endpoint. Initiates async data exports; poll for results separately.
+  - api: Data Export API
+    endpoint: /v1/exports/data-export/result/{export_id}
+    method: GET
+    requests: 100
+    window: second
+    notes: Poll status endpoint for export completion. Returns PENDING, SUCCESS, or ERROR.
+  - api: Data Export API
+    endpoint: /v1/exports/breakdowns
+    method: GET
+    requests: 100
+    window: second
+    notes: Retrieve available breakdown labels for data grouping.
+  - api: Data Export API
+    endpoint: /v1/exports/attribution-models
+    method: GET
+    requests: 100
+    window: second
+    notes: Fetch available attribution models for use in export requests.
+  - api: Data Export API
+    endpoint: /v1/exports/metrics
+    method: GET
+    requests: 100
+    window: second
+    notes: Retrieve available performance metrics for inclusion in exports.
+  - api: Orders API
+    endpoint: /v2/orders
+    method: POST
+    batchSize: 1000
+    notes: Maximum 1,000 orders per request. No explicit per-minute rate limit documented; recommend submitting at 2x pipeline cadence.
+  - api: Spend API
+    endpoint: /v1/spend_hourly
+    method: POST
+    batchSize: 1000
+    notes: Maximum 1,000 spend records per API call. No documented time-window rate limit; split larger batches into multiple requests.
+authentication:
+  type: API Key + Client ID
+  headers:
+    - name: Authorization
+      description: Your API key, passed as Basic auth value
+    - name: Data-Client-ID
+      description: Your unique client identifier from the Northbeam dashboard
+  errorCodes:
+    - code: 401
+      description: Authentication failure — verify Authorization header and Data-Client-ID are correct
+    - code: 422
+      description: Invalid request body — check payload structure and required fields
+    - code: 429
+      description: Rate limit exceeded — back off and retry after the rate limit window resets
+environments:
+  - name: Production
+    baseURL: https://api.northbeam.io
+  - name: Sandbox (UAT)
+    baseURL: https://api-uat.northbeam.io
+    notes: Validates payload structure but does not persist data

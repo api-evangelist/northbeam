@@ -1,0 +1,85 @@
+aid: northbeam
+name: Northbeam
+description: Multi-touch marketing attribution platform for e-commerce with a REST API for accessing channel-level ROAS, media mix modeling data, and creative performance metrics.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/northbeam/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+tags:
+  - Marketing Attribution
+  - Multi-Touch Attribution
+  - E-Commerce
+  - ROAS
+  - Media Mix Modeling
+  - Creative Analytics
+  - Performance Marketing
+apis:
+  - aid: northbeam:orders-api
+    name: Northbeam Orders API
+    description: REST API for submitting order and purchase data to Northbeam for attribution processing. Accepts batches of up to 1,000 orders per request via POST with JSON payload.
+    humanURL: https://docs.northbeam.io/docs/orders-api
+    baseURL: https://api.northbeam.io/v2/orders
+    tags:
+      - Orders
+      - Attribution
+      - E-Commerce
+    properties:
+      - type: Documentation
+        url: https://docs.northbeam.io/docs/orders-api
+      - type: OpenAPI
+        url: https://docs.northbeam.io/openapi
+  - aid: northbeam:spend-api
+    name: Northbeam Spend API
+    description: REST API for uploading hourly spend records from non-integrated ad platforms so Northbeam can attribute revenue to channel-level spend accurately.
+    humanURL: https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms
+    baseURL: https://api.northbeam.io/v1
+    tags:
+      - Spend
+      - Ad Platforms
+      - Attribution
+    properties:
+      - type: Documentation
+        url: https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms
+      - type: Reference
+        url: https://docs.northbeam.io/reference/post_spend-hourly
+  - aid: northbeam:data-export-api
+    name: Northbeam Data Export API
+    description: REST API for exporting attribution performance metrics including revenue, transactions, CAC, AOV, and creative analytics across multiple attribution windows and models.
+    humanURL: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+    baseURL: https://api.northbeam.io/v1/exports
+    tags:
+      - Data Export
+      - Attribution
+      - Performance Metrics
+      - ROAS
+    properties:
+      - type: Documentation
+        url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+      - type: RateLimits
+        url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+common:
+  - type: Website
+    url: https://www.northbeam.io
+  - type: Documentation
+    url: https://docs.northbeam.io
+  - type: GitHubOrg
+    url: https://github.com/north-beam
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/northbeam
+  - type: Blog
+    url: https://www.northbeam.io/blog
+  - type: Pricing
+    url: https://www.northbeam.io/pricing
+  - type: X
+    url: https://x.com/northbeam
+  - type: Plans
+    url: plans/northbeam-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/northbeam-rate-limits.yml
+  - type: FinOps
+    url: finops/northbeam-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,52 @@
+name: Northbeam FinOps Framework
+description: FOCUS-aligned financial operations reference for Northbeam API usage covering cost allocation, optimization, and governance for marketing attribution workloads.
+specificationVersion: '1.0'
+url: https://www.northbeam.io/pricing
+framework: FinOps Foundation FOCUS v1.0
+provider: Northbeam
+updated: '2026-06-13'
+costModel:
+  type: subscription
+  description: Northbeam charges a fixed monthly or annual subscription fee based on media spend volume tier, not per-API-call. API access is included in Professional and Enterprise plans.
+  billingDimensions:
+    - name: Monthly Media Spend
+      description: Primary cost driver determining which pricing tier applies. Measured as total cross-channel ad spend tracked through Northbeam.
+      unit: USD per month in tracked spend
+    - name: Data Refresh Frequency
+      description: Higher refresh cadences (hourly vs daily) are available at Professional and Enterprise tiers and may factor into pricing discussions.
+      unit: refreshes per day
+    - name: Domain Count
+      description: Number of domains or storefronts tracked. Professional supports multiple domains; Starter targets single-domain Shopify brands.
+      unit: domains
+allocation:
+  recommendations:
+    - Allocate Northbeam subscription cost across marketing channels proportional to tracked spend volume to enable channel-level FinOps visibility.
+    - Tag API usage by data pipeline job (orders sync, spend sync, data export) to correlate API call volume with business value delivered.
+    - Map subscription tier to media budget planning cycles — plan tier upgrades 30-60 days before media spend crosses tier thresholds to avoid service interruptions.
+optimization:
+  recommendations:
+    - Batch Orders API calls to the maximum 1,000 records per request to minimize API overhead and pipeline runtime costs.
+    - Batch Spend API uploads to 1,000 records per call and align submission frequency to 2x the data pipeline cadence to avoid redundant processing.
+    - Cache Data Export API responses (GET /metrics, /attribution-models, /breakdowns) locally to avoid re-fetching static reference data against the 60 req/min export limit.
+    - Schedule bulk data exports during off-peak hours to stay within the 60 requests/minute Data Export API limit without throttling production workflows.
+    - Evaluate Media Mix Modeling+ as an Enterprise add-on only when incrementality testing budget justifies the additional spend over standard MTA.
+governance:
+  policies:
+    - Rotate API keys quarterly via Settings → API Keys in the Northbeam dashboard; revoke unused keys immediately.
+    - Restrict Data-Client-ID sharing to CI/CD secrets managers (e.g., AWS Secrets Manager, HashiCorp Vault) — never embed in source code.
+    - Monitor 401/403 API error rates in observability tooling as leading indicators of credential rotation or misconfiguration.
+    - Implement exponential backoff on 429 responses across all Northbeam API integrations to respect rate limits and avoid service bans.
+    - Audit data export job schedules monthly to confirm alignment with contracted plan refresh frequency and avoid triggering overage discussions.
+  budgetAlerts:
+    - threshold: 80
+      unit: percent of monthly media spend tier ceiling
+      action: Alert engineering and marketing ops teams to project whether spend will cross tier boundary before next billing cycle.
+    - threshold: 95
+      unit: percent of monthly media spend tier ceiling
+      action: Initiate Northbeam account review conversation for tier upgrade or spend adjustment to avoid unplanned cost increases.
+forecasting:
+  notes: >
+    Northbeam pricing is subscription-based with no variable per-call billing, making cost forecasting straightforward once a tier is selected.
+    Primary forecast variable is growth in tracked media spend — model monthly ad spend trajectory against tier thresholds ($1.5M/year for Starter,
+    $250k/month for Professional, $500k/month for Enterprise) to anticipate tier transitions and budget accordingly.
+    Include optional add-ons (MMM+, multi-region, hourly refresh) as discrete line items in annual marketing technology budgets.
