@@ -5,5 +5,17 @@
   "rssConfirmed": false,
   "note": "No RSS/Atom feed detected on https://www.northbeam.io/blog as of 2026-06-13. The blog uses a filterable SPA layout with a newsletter subscription (The Media Buyer) but exposes no machine-readable feed endpoint.",
   "lastChecked": "2026-06-13",
-  "posts": []
+  "posts": [],
+  "repo": "northbeam",
+  "feeds": [
+    {
+      "source": "https://www.linkedin.com/company/northbeam",
+      "feed_url": "https://www.linkedin.com/company/northbeam",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-14T20:42:17Z"
 }
