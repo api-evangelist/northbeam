@@ -60,6 +60,8 @@ apis:
       - type: RateLimits
         url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
 common:
+  - type: DomainSecurity
+    url: security/northbeam-domain-security.yml
   - type: Website
     url: https://www.northbeam.io
   - type: Documentation
