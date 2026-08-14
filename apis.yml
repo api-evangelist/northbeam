@@ -1,23 +1,33 @@
 aid: northbeam
 name: Northbeam
-description: Multi-touch marketing attribution platform for e-commerce with a REST API for accessing channel-level ROAS, media mix modeling data, and creative performance metrics.
+description: >-
+  Northbeam is a multi-touch marketing attribution platform for e-commerce brands. It joins
+  first-party click and view data collected by its own browser pixel to order-level revenue
+  and to ad spend across every channel, then reports channel, campaign, adset and ad level
+  ROAS, CAC, AOV and creative performance under a choice of attribution models and windows.
+  The developer surface is three REST APIs published as OpenAPI: an Orders API for pushing
+  purchase data in as the revenue ground truth, a Spend API for uploading cost from channels
+  Northbeam does not integrate with natively, and an asynchronous Data Export API for pulling
+  attribution metrics back out to Northbeam documents, GCS or S3. Northbeam also runs a
+  first-party remote MCP server at mcp.northbeam.io, OAuth-secured and read-only, which it
+  documents as a custom connector for Claude and ChatGPT.
 type: Index
 accessModel:
-  pricing: freemium
-  onboarding: unknown
+  pricing: paid
+  onboarding: sales
   trial: false
   try_now: false
   public: false
-  label: Freemium
-  confidence: medium
+  label: Paid
+  confidence: high
   source:
   - plans
-  generated: '2026-07-22'
-  method: derived
+  generated: '2026-08-13'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/northbeam.png
 url: https://raw.githubusercontent.com/api-evangelist/northbeam/refs/heads/main/apis.yml
 created: '2026-06-13'
-modified: '2026-06-13'
+modified: '2026-08-13'
 specificationVersion: '0.19'
 tags:
   - Marketing Attribution
@@ -27,10 +37,17 @@ tags:
   - Media Mix Modeling
   - Creative Analytics
   - Performance Marketing
+  - Advertising
+  - Marketing Analytics
+  - Agents
 apis:
   - aid: northbeam:orders-api
     name: Northbeam Orders API
-    description: REST API for submitting order and purchase data to Northbeam for attribution processing. Accepts batches of up to 1,000 orders per request via POST with JSON payload.
+    description: >-
+      REST API for submitting order and purchase data to Northbeam as the revenue ground truth
+      for multi-touch attribution and media mix modeling. Writes are natural-key upserts on a
+      caller-supplied order_id, batched up to 1,000 orders per request, with a partial-update
+      PATCH and an additive alias endpoint on v2.
     humanURL: https://docs.northbeam.io/docs/orders-api
     baseURL: https://api.northbeam.io/v2/orders
     tags:
@@ -40,12 +57,25 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.northbeam.io/docs/orders-api
+      - type: APIReference
+        url: https://docs.northbeam.io/reference/post_orders-1
       - type: OpenAPI
-        url: https://docs.northbeam.io/openapi
+        url: openapi/northbeam-orders-v2-openapi.yml
+      - type: OpenAPI
+        url: openapi/northbeam-orders-v1-openapi.yml
+      - type: Overlay
+        url: overlays/northbeam-orders-v2-overlay.yaml
+      - type: Overlay
+        url: overlays/northbeam-orders-v1-overlay.yaml
+      - type: AgentSkill
+        url: skills/northbeam-sync-orders.md
   - aid: northbeam:spend-api
     name: Northbeam Spend API
-    description: REST API for uploading hourly spend records from non-integrated ad platforms so Northbeam can attribute revenue to channel-level spend accurately.
-    humanURL: https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms
+    description: >-
+      REST API for uploading daily and hourly spend records from ad platforms Northbeam does
+      not integrate with natively, so those channels can be attributed. Rows are upserted on
+      the platform/campaign/adset/ad natural key, which must match the customer's UTM tagging.
+    humanURL: https://docs.northbeam.io/docs/spend-api
     baseURL: https://api.northbeam.io/v1
     tags:
       - Spend
@@ -53,12 +83,21 @@ apis:
       - Attribution
     properties:
       - type: Documentation
-        url: https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms
-      - type: Reference
+        url: https://docs.northbeam.io/docs/spend-api
+      - type: APIReference
         url: https://docs.northbeam.io/reference/post_spend-hourly
+      - type: OpenAPI
+        url: openapi/northbeam-spend-v1-openapi.yml
+      - type: Overlay
+        url: overlays/northbeam-spend-v1-overlay.yaml
+      - type: AgentSkill
+        url: skills/northbeam-sync-ad-spend.md
   - aid: northbeam:data-export-api
     name: Northbeam Data Export API
-    description: REST API for exporting attribution performance metrics including revenue, transactions, CAC, AOV, and creative analytics across multiple attribution windows and models.
+    description: >-
+      Asynchronous REST API for exporting attribution performance metrics including revenue,
+      transactions, CAC, AOV and creative analytics across attribution windows and models.
+      Submit an export config, poll for the result, or deliver straight to a GCS or S3 bucket.
     humanURL: https://docs.northbeam.io/docs/northbeam-api-data-export-1
     baseURL: https://api.northbeam.io/v1/exports
     tags:
@@ -69,25 +108,106 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+      - type: APIReference
+        url: https://docs.northbeam.io/reference/post_data-export-1
+      - type: OpenAPI
+        url: openapi/northbeam-data-export-v1-openapi.yml
+      - type: Overlay
+        url: overlays/northbeam-data-export-v1-overlay.yaml
       - type: RateLimits
         url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+      - type: AgentSkill
+        url: skills/northbeam-export-attribution-data.md
+  - aid: northbeam:mcp
+    name: Northbeam MCP Server
+    description: >-
+      First-party remote Model Context Protocol server giving an agent read-only access to the
+      caller's Northbeam dashboards — performance, attribution, spend and orders. Documented as
+      a custom connector for Claude (web, Desktop, Code) and ChatGPT. Secured with OAuth 2.1
+      (PKCE, dynamic client registration, scope access:mcp) against an Auth0 tenant; the
+      tools/list method is bearer-gated. Available to Pro and Enterprise customers.
+    humanURL: https://docs.northbeam.io/docs/connect-northbeam-to-claude
+    baseURL: https://mcp.northbeam.io
+    tags:
+      - MCP
+      - Agents
+      - Attribution
+    properties:
+      - type: MCPServer
+        url: mcp/northbeam-mcp.yml
+      - type: ToolCrosswalk
+        url: mcp/northbeam-tool-crosswalk.yml
+      - type: Documentation
+        url: https://docs.northbeam.io/docs/connect-northbeam-to-claude
+      - type: OAuthScopes
+        url: well-known/northbeam-oauth-authorization-server.json
 common:
-  - type: DomainSecurity
-    url: security/northbeam-domain-security.yml
   - type: Website
     url: https://www.northbeam.io
+  - type: DeveloperPortal
+    url: https://docs.northbeam.io
   - type: Documentation
     url: https://docs.northbeam.io
+  - type: APIReference
+    url: https://docs.northbeam.io/reference
+  - type: GettingStarted
+    url: https://docs.northbeam.io/docs/getting-started
+  - type: Support
+    url: https://www.northbeam.io/submit-a-support-ticket
+  - type: HelpCenter
+    url: https://docs.northbeam.io/docs/frequently-asked-questions
+  - type: Blog
+    url: https://www.northbeam.io/blog
   - type: GitHubOrg
     url: https://github.com/north-beam
   - type: LinkedIn
     url: https://www.linkedin.com/company/northbeam
-  - type: Blog
-    url: https://www.northbeam.io/blog
-  - type: Pricing
-    url: https://www.northbeam.io/pricing
   - type: X
     url: https://x.com/northbeam
+  - type: Pricing
+    url: https://www.northbeam.io/pricing
+  - type: SignUp
+    url: https://www.northbeam.io/demo
+  - type: Login
+    url: https://dashboard.northbeam.io/
+  - type: TermsOfService
+    url: https://www.northbeam.io/terms-conditions
+  - type: PrivacyPolicy
+    url: https://www.northbeam.io/privacy
+  - type: Compliance
+    url: https://www.northbeam.io/data-security
+  - type: TrustCenter
+    url: security/northbeam-trust-center.yml
+  - type: DomainSecurity
+    url: security/northbeam-domain-security.yml
+  - type: Authentication
+    url: authentication/northbeam-authentication.yml
+  - type: Conventions
+    url: conventions/northbeam-conventions.yml
+  - type: Idempotency
+    url: conventions/northbeam-conventions.yml
+  - type: Conformance
+    url: conformance/northbeam-conformance.yml
+  - type: ErrorCatalog
+    url: errors/northbeam-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/northbeam-lifecycle.yml
+  - type: DataModel
+    url: data-model/northbeam-data-model.yml
+  - type: Sandbox
+    url: sandbox/northbeam-sandbox.yml
+  - type: Components
+    url: components/northbeam-components.yml
+  - type: Packages
+    url: packages/northbeam-packages.yml
+  - type: WellKnown
+    url: well-known/northbeam-well-known.yml
+  - type: LLMsTxt
+    url: llms/northbeam-llms.txt
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: MCPServer
+    url: mcp/northbeam-mcp.yml
   - type: Plans
     url: plans/northbeam-plans-pricing.yml
   - type: RateLimits
@@ -103,3 +223,8 @@ common:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 33
+  pass: local-v1
