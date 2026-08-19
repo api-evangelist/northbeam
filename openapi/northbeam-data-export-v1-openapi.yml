@@ -1,0 +1,401 @@
+openapi: 3.0.0
+info:
+  title: API - DATA EXPORT - V1
+  version: '1'
+  description: API for exporting data from Northbeam
+  termsOfService: https://www.northbeam.io/terms
+servers:
+- url: https://api.northbeam.io/v1/exports
+security:
+- api_key: []
+  client_id: []
+paths:
+  /data-export:
+    post:
+      summary: Create a data export config
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataExport'
+      responses:
+        '201':
+          description: Data Export created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+        '401':
+          description: Unauthorized
+        '422':
+          description: Invalid Body Params
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+  /data-export/result/{export_id}:
+    get:
+      summary: Fetch a data export result
+      parameters:
+      - in: path
+        name: export_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      responses:
+        '200':
+          description: Data export result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataExportResult'
+        '401':
+          description: Unauthorized
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+  /breakdowns:
+    get:
+      summary: Fetch all labels available for breakdown
+      responses:
+        '200':
+          description: Breakdown labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breakdowns'
+        '401':
+          description: Unauthorized
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+  /attribution-models:
+    get:
+      summary: Fetch all available attribution models
+      responses:
+        '200':
+          description: Attribution models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributionModels'
+        '401':
+          description: Unauthorized
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+  /metrics:
+    get:
+      summary: Fetch all available metrics
+      responses:
+        '200':
+          description: Metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics'
+        '401':
+          description: Unauthorized
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header
+    client_id:
+      type: apiKey
+      name: Data-Client-ID
+      in: header
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    Export_Request_Base:
+      type: object
+      properties:
+        level:
+          description: Level of metrics to export.
+          type: string
+          enum:
+          - platform
+          - campaign
+          - adset
+          - ad
+          default: platform
+        time_granularity:
+          description: Data time granularity.
+          type: string
+          enum:
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          - HOURLY
+          default: DAILY
+        period_type:
+          description: Time period to be exported. It can be either a relative window or a fixed window. If you choose to export a fixed window, the `period_options` property must be set.
+          type: string
+          enum:
+          - FIXED
+          - TODAY
+          - YESTERDAY
+          - YESTERDAY_AND_TODAY
+          - LAST_3_DAYS
+          - LAST_7_DAYS
+          - LAST_14_DAYS
+          - LAST_28_DAYS
+          - LAST_30_DAYS
+          - LAST_60_DAYS
+          - LAST_90_DAYS
+          - LAST_180_DAYS
+          - MONTH_TO_DATE
+          - LAST_MONTH
+          - THIS_WEEK
+          - LAST_WEEK
+          - THIS_WEEK_AND_LAST_WEEK
+          - LAST_3_WEEKS
+          - LAST_4_WEEKS
+          - LAST_7_WEEKS
+          - LAST_12_WEEKS
+          - LAST_14_WEEKS
+          - LAST_26_WEEKS
+          - LAST_28_WEEKS
+          - LAST_52_WEEKS
+          - THIS_MONTH
+          - THIS_MONTH_AND_LAST_MONTH
+          - LAST_3_MONTHS
+          - LAST_6_MONTHS
+          - LAST_9_MONTHS
+          - LAST_12_MONTHS
+          - YEAR_TO_DATE
+          - LAST_YEAR
+          - LAST_3_YEARS
+          - LAST_5_YEARS
+          default: LAST_7_DAYS
+        period_options:
+          description: Time frame to be exported if `period_type` is set to "FIXED". The time period cannot be greater than 2 years.
+          type: object
+          properties:
+            period_starting_at:
+              type: string
+              format: date-time
+            period_ending_at:
+              type: string
+              format: date-time
+        breakdowns:
+          description: Labels used to breakdown the data. If you are unsure which breakdowns to use, you can fetch them using the `/breakdowns` endpoint.
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              values:
+                type: array
+                items:
+                  type: string
+        options:
+          type: object
+          properties:
+            export_aggregation:
+              description: Aggregation type.
+              type: string
+              enum:
+              - BREAKDOWN
+              - DATE
+              default: BREAKDOWN
+            remove_zero_spend:
+              description: Remove rows with zero spend.
+              type: boolean
+              default: false
+            aggregate_data:
+              description: Aggregate data, ignoring campaign, adset and ad levels.
+              type: boolean
+              default: false
+            include_ids:
+              description: Include campaign, adset and ad ids in exported data.
+              type: boolean
+              default: false
+            include_kind_and_platform:
+              description: Include campaign, adset and ad kind and platform in exported data.
+              type: boolean
+              default: false
+        attribution_options:
+          type: object
+          properties:
+            attribution_models:
+              description: Attribution models to use. Check in `/attribution-models` for available models.
+              type: array
+              minimum: 1
+              items:
+                type: string
+            attribution_windows:
+              type: array
+              minimum: 1
+              items:
+                type: string
+                enum:
+                - '1'
+                - '3'
+                - '7'
+                - '14'
+                - '30'
+                - '60'
+                - '90'
+            accounting_modes:
+              type: array
+              minimum: 1
+              items:
+                type: string
+                enum:
+                - cash
+                - accrual
+        metrics:
+          description: Metrics to export. Check in `/metrics` for available metrics.
+          type: array
+          minimum: 1
+          items:
+            type: object
+            properties:
+              id:
+                description: Metric ID
+                type: string
+              label:
+                description: Metric label to be used as file header. If not provided, a default label will be used.
+                type: string
+                pattern: ^[a-zA-Z][a-zA-Z0-9\_]+[a-zA-Z0-9]$
+            required:
+            - id
+      required:
+      - attribution_options
+      - metrics
+    Export_To_Northbeam_Documents:
+      allOf:
+      - type: object
+        properties:
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used.
+            type: string
+            minLength: 3
+            pattern: ^[A-Za-z0-9_-]+$
+      - $ref: '#/components/schemas/Export_Request_Base'
+    Export_To_GCS_Bucket:
+      allOf:
+      - type: object
+        required:
+        - bucket_name
+        properties:
+          bucket_name:
+            description: Name of the external bucket where to export your file.
+            type: string
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
+            type: string
+            minLength: 3
+            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
+      - $ref: '#/components/schemas/Export_Request_Base'
+    Export_To_S3_Bucket:
+      allOf:
+      - type: object
+        required:
+        - aws_role
+        - region
+        properties:
+          aws_role:
+            description: AWS role ARN with access to the S3 bucket.
+            type: string
+          region:
+            description: Region of the S3 bucket.
+            type: string
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
+            type: string
+            minLength: 3
+            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
+      - $ref: '#/components/schemas/Export_Request_Base'
+    CreateDataExport:
+      oneOf:
+      - $ref: '#/components/schemas/Export_To_Northbeam_Documents'
+      - $ref: '#/components/schemas/Export_To_GCS_Bucket'
+      - $ref: '#/components/schemas/Export_To_S3_Bucket'
+    DataExportResult:
+      type: object
+      properties:
+        data_export_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - PENDING
+          - SUCCESS
+          - ERROR
+        result:
+          type: array
+          items:
+            type: string
+            format: uri
+        created_at:
+          type: string
+          format: date-time
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        warn:
+          description: Warning info regarding deprecated params, actions expected, etc.
+          type: object
+    Breakdowns:
+      type: object
+      properties:
+        breakdowns:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              values:
+                type: array
+                items:
+                  type: string
+    AttributionModels:
+      type: object
+      properties:
+        attribution_models:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+                nullable: true
+    Metrics:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              label:
+                type: string
+                nullable: true

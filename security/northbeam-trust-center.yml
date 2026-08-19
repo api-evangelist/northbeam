@@ -1,0 +1,61 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.northbeam.io/data-security
+name: Northbeam Data Security
+type: security-page
+note: >
+  Northbeam publishes a security posture page rather than a hosted trust center. Probes for
+  a dedicated portal missed: https://trust.northbeam.io does not resolve (000) and
+  https://www.northbeam.io/security returns 404. The certification claim, the cloud
+  footprint and the tenancy model are all stated on the /data-security page itself.
+url: https://www.northbeam.io/data-security
+certifications:
+  - name: SOC 2 Type 2
+    status: certified
+    verified: claimed-on-provider-page
+    report_access: available on request by email
+    quote: >
+      "Northbeam is certified SOC 2 compliant. Email us for more info on Northbeam's Soc 2
+      Type 2 Compliance Certification… We are Soc 2 Type 2 compliant and our report is
+      available upon request."
+regulations:
+  - name: GDPR
+    url: https://www.northbeam.io/gdpr
+  - name: Privacy Policy
+    url: https://www.northbeam.io/privacy
+  - name: Terms and Conditions
+    url: https://www.northbeam.io/terms-conditions
+practices:
+  cloud_provider: Google Cloud Platform
+  network: Google Virtual Private Cloud (VPC)
+  tenancy: each customer's data is logically separated in the data and analytics platform
+  encryption:
+    at_rest: true
+    in_transit: true
+    default: true
+  identity_and_access: Auth0 identity protocols
+  program:
+    - unified controls framework
+    - threat detection program
+    - secure software development methods
+    - in-house governance and oversight team
+gaps:
+  - no third-party trust portal (Vanta/Drata/SafeBase/Whistic) — report is email-gated
+  - no sub-processor list published
+  - no penetration-test summary published
+  - no ISO 27001, PCI DSS or HIPAA claim
+  - no security.txt (RFC 9116) served on any host
+  - no published vulnerability disclosure policy or bug bounty program
+evidence:
+  - url: https://www.northbeam.io/data-security
+    status: 200
+    fetched: '2026-08-13'
+  - url: https://www.northbeam.io/gdpr
+    status: 200
+    fetched: '2026-08-13'
+  - url: https://trust.northbeam.io
+    status: 000
+    fetched: '2026-08-13'
+  - url: https://www.northbeam.io/security
+    status: 404
+    fetched: '2026-08-13'

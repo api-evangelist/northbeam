@@ -1,0 +1,28 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/northbeam-data-export-v1-openapi.yml, openapi/northbeam-orders-v1-openapi.yml,
+  openapi/northbeam-orders-v2-openapi.yml, openapi/northbeam-spend-v1-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/northbeam-data-export-v1-openapi.yml
+  - openapi/northbeam-orders-v1-openapi.yml
+  - openapi/northbeam-orders-v2-openapi.yml
+  - openapi/northbeam-spend-v1-openapi.yml
+- name: client_id
+  type: apiKey
+  in: header
+  parameter: Data-Client-ID
+  sources:
+  - openapi/northbeam-data-export-v1-openapi.yml
+  - openapi/northbeam-orders-v1-openapi.yml
+  - openapi/northbeam-orders-v2-openapi.yml
+  - openapi/northbeam-spend-v1-openapi.yml

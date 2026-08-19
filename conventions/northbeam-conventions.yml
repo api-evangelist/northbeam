@@ -1,0 +1,191 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.northbeam.io/docs/using-the-api.md
+docs:
+  - https://docs.northbeam.io/docs/authentication.md
+  - https://docs.northbeam.io/docs/using-the-api.md
+  - https://docs.northbeam.io/docs/errors.md
+  - https://docs.northbeam.io/docs/orders-api-limits.md
+  - https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+  - https://docs.northbeam.io/docs/order-definition.md
+  - https://docs.northbeam.io/docs/hashing-customer-data.md
+derived_from:
+  - openapi/northbeam-orders-v2-openapi.yml
+  - openapi/northbeam-spend-v1-openapi.yml
+  - openapi/northbeam-data-export-v1-openapi.yml
+
+authentication:
+  style: two-header API key
+  headers:
+    - name: Authorization
+      description: The API key issued in the Northbeam dashboard (Settings -> API Keys -> Create new API Key)
+    - name: Data-Client-ID
+      description: A UUID identifying the customer account the call is made against
+  scheme_names_in_spec:
+    - api_key
+    - client_id
+  oauth: >
+    OAuth 2.1 is used ONLY for the MCP agent surface (https://mcp.northbeam.io); the REST
+    APIs are API-key only. See authentication/northbeam-authentication.yml and
+    mcp/northbeam-mcp.yml.
+  cross_ref: authentication/northbeam-authentication.yml
+
+idempotency:
+  supported: true
+  mechanism: natural-key upsert
+  header: null
+  note: >
+    Northbeam does not implement an Idempotency-Key request header. It achieves the same
+    guarantee structurally: the write operations are UPSERTS keyed on a caller-supplied
+    natural key, so replaying an identical request is safe and produces no duplicate.
+    POST /orders (v1 and v2) is documented as "Upsert a list of orders" and the Order
+    schema requires `order_id`, described as "a universal id that must be unique across
+    all of your existing orders". POST /spend and POST /spend_hourly are documented as
+    "Upsert one or multiple spend records". POST /orders/aliases is explicitly additive
+    and idempotent — the spec says "Aliases that already exist are silently ignored".
+  keys:
+    orders: order_id
+    spend: platform_name + campaign_id + adset_id + ad_id (+ time window)
+    order_aliases: alias id (duplicates silently ignored)
+  retention: not published
+  caveats:
+    - >
+      PATCH /orders is NOT a full upsert — it is a partial update that fails the entire
+      batch if any order_id does not exist. Array fields (order_tags, discount_codes) are
+      replaced wholesale rather than merged, and `products`/`refunds` cannot be patched at
+      all; those require re-submitting the full order via POST.
+
+pagination:
+  supported: false
+  note: >
+    No pagination parameters, cursors or link headers appear anywhere in the four published
+    OpenAPI documents. GET /orders is bounded by a date range instead (`start_date`,
+    `end_date` query parameters). Large result sets are served through the asynchronous
+    Data Export API rather than paged responses.
+  range_parameters:
+    - start_date
+    - end_date
+
+batching:
+  supported: true
+  style: array request body
+  limits:
+    - operation: POST /v2/orders
+      max_items: 1000
+      unit: orders per request
+      source: https://docs.northbeam.io/docs/orders-api-limits.md
+    - operation: POST /v1/spend, POST /v1/spend_hourly
+      max_items: 1000
+      unit: spend records per request
+      source: https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+  partial_failure: >
+    Batches are all-or-nothing on PATCH /v2/orders — "The entire batch fails if any
+    order_id does not exist or any entry fails validation."
+
+async_jobs:
+  supported: true
+  pattern: submit-then-poll
+  submit: POST /v1/exports/data-export
+  poll: GET /v1/exports/data-export/result/{export_id}
+  states:
+    - PENDING
+    - SUCCESS
+    - ERROR
+  sinks:
+    - Northbeam documents (default)
+    - Google Cloud Storage bucket
+    - Amazon S3 bucket
+  note: >
+    The Data Export API is the only long-running surface; there is no webhook or callback,
+    so completion is discovered by polling the result endpoint (100 req/second).
+
+versioning:
+  scheme: uri-path
+  current:
+    orders: v2
+    spend: v1
+    data_export: v1
+  hosts:
+    production: https://api.northbeam.io
+    uat: https://api-uat.northbeam.io
+  docs_versions_published:
+    - v2.2
+    - v2.1.0
+  note: >
+    Orders v1 is still served and still documented, but its OpenAPI document is titled
+    "API - Orders - V1 (Deprecated)". See lifecycle/northbeam-lifecycle.yml.
+  cross_ref: lifecycle/northbeam-lifecycle.yml
+
+error_envelope:
+  format: proprietary
+  rfc9457: false
+  shapes:
+    - surface: Orders API
+      fields:
+        status: string — the error code
+        response: >
+          JSON-encoded string OR plain string. For known errors it is an array of objects
+          carrying order_id, a human-readable message, and the json_path of the failing
+          attribute. For other errors it may be a plain human-readable string.
+      source: https://docs.northbeam.io/docs/errors.md
+    - surface: Data Export API
+      fields:
+        error: string
+      source: openapi/northbeam-data-export-v1-openapi.yml (components.schemas.Error)
+    - surface: Spend API
+      fields:
+        detail: array of {loc, msg, type} validation errors (FastAPI-style RequestError)
+      source: openapi/northbeam-spend-v1-openapi.yml (components.schemas.RequestError)
+    - surface: rate limiting
+      fields:
+        error: rate_limit_error
+        retry_after_seconds: integer
+      source: https://docs.northbeam.io/docs/orders-api-limits.md
+  note: >
+    The error envelope is NOT consistent across the three APIs — three different shapes are
+    published. An agent must branch on which API it called.
+  cross_ref: errors/northbeam-problem-types.yml
+
+rate_limit_signaling:
+  status_code: 429
+  response_headers:
+    - Retry-After
+  body_on_exhaustion: '{"error": "rate_limit_error", "retry_after_seconds": 37}'
+  advertised_headers: none
+  note: >
+    Northbeam publishes NO X-RateLimit-*/RateLimit-* budget headers — an agent cannot see
+    how much of the 30 MB / 60 s window it has consumed until it is refused. Retry-After
+    on the 429 is the only runtime signal.
+  cross_ref: rate-limits/northbeam-rate-limits.yml
+
+request_tracing:
+  request_id_header: none published
+  note: No correlation/request-id header is documented or declared in any spec.
+
+field_conventions:
+  case: snake_case
+  timestamps: ISO-8601 with offset (e.g. 2022-03-08T01:23:45-08:00)
+  currency: ISO 4217 three-letter code (pattern-constrained in components.schemas._patterns)
+  country: ISO 3166-1 alpha-2 (pattern-constrained in components.schemas._patterns)
+  null_semantics: >
+    On PATCH /v2/orders, an explicit null clears an optional field value; an omitted field
+    retains its existing value.
+  additional_properties: >
+    The Order item schema sets additionalProperties: false — unknown fields are rejected
+    rather than ignored.
+  pii_hashing: >
+    customer_email and customer_phone_number may be sent pre-hashed as
+    hashed_customer_email / hashed_customer_phone_number (SHA-256, normalized first).
+    The hashed and plaintext variants are mutually exclusive.
+    See https://docs.northbeam.io/docs/hashing-customer-data.md
+
+expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata_fields:
+  supported: true
+  fields:
+    - order_tags
+    - discount_codes
+  note: array fields are replaced entirely on PATCH, never merged per item

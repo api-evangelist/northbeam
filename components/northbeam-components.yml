@@ -1,0 +1,79 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.northbeam.io/docs/non-shopify-installation.md
+docs:
+  - https://docs.northbeam.io/docs/add-pixel.md
+  - https://docs.northbeam.io/docs/non-shopify-installation.md
+  - https://docs.northbeam.io/docs/shopify-installation.md
+  - https://docs.northbeam.io/docs/page-view-events.md
+  - https://docs.northbeam.io/docs/optional-additional-methods.md
+  - https://docs.northbeam.io/docs/setting-up-custom-goals.md
+description: >
+  Northbeam's only client-side surface is the Northbeam Pixel — a loader script installed in
+  the <head> of every page that exposes a global `window.Northbeam` JavaScript API. It is not
+  an embeddable UI component library; it is a browser-side EVENT API, and it is the front
+  half of the attribution product (the Orders/Spend REST APIs are the back half). It is
+  documented here as a component because it is client-side, script-tag distributed and
+  versionless, which are the properties that make it behave unlike an SDK.
+
+families:
+  - name: Northbeam Pixel
+    kind: browser event tracker
+    loader:
+      distribution: cdn
+      url_template: https://j.northbeam.io/ota-sp/{DATA_CLIENT_ID}.js
+      install: inline <script> snippet in <head> on every page, or a Google Tag Manager tag
+      global: window.Northbeam
+      versioned: false
+      note: >
+        The snippet is per-tenant (templated on the Data Client ID) and carries no version.
+        Northbeam instructs integrators not to modify the script other than setting the ID.
+      requirements:
+        content_security_policy: >
+          connect-src must allow the first-party `i` subdomain — either *.your-store.com or
+          i.your-store.com.
+    methods:
+      - name: identify
+        description: Associate the current session with a known visitor
+      - name: identifyCustomerId
+        description: Associate the current session with a customer id
+      - name: trackPageView
+        description: Record a page view
+      - name: trackPageViewInitial
+        description: Record the first page view; fired automatically by the loader
+      - name: fireEmailCaptureEvent
+        description: Record an email capture
+      - name: fireCustomGoal
+        description: Record a custom goal conversion
+      - name: firePurchaseEvent
+        description: >
+          Signal a completed conversion with full revenue detail — used when revenue values
+          must be actionable before backend order data reaches Northbeam. Higher complexity.
+      - name: fireSlimPurchaseEvent
+        description: >
+          Signal a completed conversion with the order number only — Northbeam's default
+          recommended function when backend revenue data arrives in time. Lower complexity.
+    conversion_guidance: >
+      Exactly one of fireSlimPurchaseEvent or firePurchaseEvent must fire when a transaction
+      completes and final order details are available — typically on the order confirmation
+      or thank-you page. The order_id it emits must exactly match the order_id sent to the
+      Orders REST API, which is what binds the client-side touchpoint to the server-side
+      revenue record.
+    platforms:
+      - name: Shopify
+        install: native app / theme installation
+        docs: https://docs.northbeam.io/docs/shopify-installation.md
+      - name: All other platforms
+        install: manual <head> snippet or Google Tag Manager
+        docs: https://docs.northbeam.io/docs/non-shopify-installation.md
+
+embedded_ui:
+  present: false
+  note: >
+    Northbeam publishes no embeddable dashboard, web-component library, hosted checkout or
+    element library. Reporting is consumed either in the Northbeam dashboard
+    (https://dashboard.northbeam.io/), in the mobile app, or through the Data Export API.
+
+cross_ref:
+  packages: packages/northbeam-packages.yml
+  data_model: data-model/northbeam-data-model.yml

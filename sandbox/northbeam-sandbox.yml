@@ -1,0 +1,79 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.northbeam.io/docs/authentication.md
+docs:
+  - https://docs.northbeam.io/docs/authentication.md
+  - https://docs.northbeam.io/docs/using-the-api.md
+name: Northbeam UAT (User Acceptance Testing) environment
+description: >
+  Northbeam runs a production-equivalent test environment on a separate host and — unusually
+  — publishes anonymous test credentials for it, so an integrator can exercise request
+  validation before they hold an API key at all.
+
+environments:
+  - name: Production
+    base_url: https://api.northbeam.io
+    persists_data: true
+    note: >
+      Orders sent here are used for multi-touch attribution and media mix modeling.
+    declared_in:
+      - openapi/northbeam-orders-v2-openapi.yml
+      - openapi/northbeam-orders-v1-openapi.yml
+      - openapi/northbeam-spend-v1-openapi.yml
+      - openapi/northbeam-data-export-v1-openapi.yml
+  - name: UAT / testing
+    base_url: https://api-uat.northbeam.io
+    persists_data: false
+    note: >
+      Described in the specs as "User Acceptance Testing (UAT), Production Equivalent
+      (provided for Customer Testing ONLY, spend submitted here does not get used in
+      attribution)". The docs add that in the testing environment no orders are saved and
+      only validation results are returned.
+    declared_in:
+      - openapi/northbeam-orders-v2-openapi.yml
+      - openapi/northbeam-orders-v1-openapi.yml
+      - openapi/northbeam-spend-v1-openapi.yml
+    caveat: >
+      Testing with real user keys against UAT is supported but the development database is
+      purged periodically — Northbeam explicitly says it should be treated as a testing
+      environment and not a stable one.
+    not_declared_in:
+      - openapi/northbeam-data-export-v1-openapi.yml
+    coverage_note: >
+      The Data Export API declares only the production server. There is no documented UAT
+      base URL for exports, so read-side integrations cannot be rehearsed the way write-side
+      ingestion can.
+
+test_credentials:
+  published: true
+  anonymous: true
+  source: https://docs.northbeam.io/docs/authentication.md
+  values:
+    - header: Authorization
+      value: None
+    - header: Content-Type
+      value: application/json
+    - header: Data-Client-ID
+      value: test
+  quote: >
+    "When testing, you can use the following values without the need for production keys. In
+    the testing environment, no orders are saved and we only return the results of
+    validation."
+  scope: request/payload validation only — nothing is persisted and nothing is attributed
+
+key_model:
+  test_vs_live_prefixes: false
+  note: >
+    Northbeam does not use distinguishable test-mode vs live-mode key prefixes. The same key
+    material works against both hosts; the ENVIRONMENT is selected by hostname
+    (api-uat.northbeam.io vs api.northbeam.io). An agent or CI job that misreads the host
+    writes real attribution data — there is no key-shaped guard rail.
+
+test_clocks: false
+fixtures:
+  hosted_fixtures: false
+  note: >
+    No fixture generator, trigger endpoint or time-simulation tooling is published. The
+    ReadMe API reference does provide a "Try It" console with example payloads that can be
+    pointed at either the UAT or production host.
+  reference_console: https://docs.northbeam.io/reference/post_orders-1

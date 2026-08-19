@@ -1,0 +1,115 @@
+generated: '2026-08-13'
+method: derived
+source: mcp/northbeam-mcp.yml + openapi/_original/*.json
+description: >
+  Crosswalk between Northbeam's agent surface (the remote MCP server at
+  https://mcp.northbeam.io) and its machine-readable REST core (four OpenAPI documents
+  published through the ReadMe API registry). The two surfaces CANNOT be bound row-for-row
+  in this round: the MCP tools/list method is bearer-gated (HTTP 401, scope access:mcp) and
+  Northbeam publishes no tool reference page, so no tool NAME is known. Nothing is invented
+  here — crosswalk[] is deliberately empty and every REST operation is recorded as
+  rest_only, which is the honest state of knowledge, not an assertion that no tool covers it.
+surfaces:
+  openapi:
+    files:
+      - openapi/northbeam-orders-v2-openapi.yml
+      - openapi/northbeam-orders-v1-openapi.yml
+      - openapi/northbeam-spend-v1-openapi.yml
+      - openapi/northbeam-data-export-v1-openapi.yml
+    source: https://dash.readme.com/api/v1/api-registry/ (ReadMe registry, @northbeam-customer-sucess/v2.2)
+    gated: false
+  graphql:
+    present: false
+  mcp:
+    url: https://mcp.northbeam.io
+    gated: true
+    gate: OAuth 2.1 bearer, scope access:mcp, Pro/Enterprise entitlement
+    observed_status: 401
+crosswalk: []
+mcp_only: []
+rest_only:
+  - capability: Orders ingestion (v2, current)
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    operations:
+      - method: POST
+        path: /orders
+        summary: Upsert a list of orders to Northbeam
+      - method: PATCH
+        path: /orders
+        operationId: patchOrders
+        summary: Partially update existing orders
+      - method: GET
+        path: /orders
+        summary: Fetch a list of orders
+      - method: POST
+        path: /orders/aliases
+        operationId: addOrderAliases
+        summary: Add aliases to existing orders
+  - capability: Orders ingestion (v1, deprecated)
+    spec: openapi/northbeam-orders-v1-openapi.yml
+    operations:
+      - method: POST
+        path: /orders
+        summary: Upsert a list of orders to Northbeam
+      - method: GET
+        path: /orders
+        summary: Fetch a list of orders
+  - capability: Ad spend ingestion
+    spec: openapi/northbeam-spend-v1-openapi.yml
+    operations:
+      - method: GET
+        path: /spend
+        summary: List spend records
+      - method: POST
+        path: /spend
+        summary: Upsert one or multiple spend records
+      - method: DELETE
+        path: /spend
+        summary: Delete a spend record
+      - method: GET
+        path: /spend_hourly
+        summary: List hourly spend records
+      - method: POST
+        path: /spend_hourly
+        summary: Upsert one or multiple hourly spend records
+      - method: DELETE
+        path: /spend_hourly
+        summary: Delete an hourly spend record
+  - capability: Attribution data export
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    operations:
+      - method: POST
+        path: /data-export
+        summary: Create a data export config
+      - method: GET
+        path: /data-export/result/{export_id}
+        summary: Fetch a data export result
+      - method: GET
+        path: /breakdowns
+        summary: Fetch all labels available for breakdown
+      - method: GET
+        path: /attribution-models
+        summary: Fetch all available attribution models
+      - method: GET
+        path: /metrics
+        summary: Fetch all available metrics
+divergence_notes:
+  - >
+    The MCP server is described in Northbeam's docs as READ-ONLY over dashboards. The REST
+    surface is predominantly WRITE (order and spend ingestion). These are therefore not two
+    projections of the same capability set — a substantial part of the REST surface almost
+    certainly has no tool, and the "list my dashboards" capability the docs demonstrate has
+    no corresponding public REST operation. Both halves of that divergence remain unproven
+    until an authenticated tools/list is possible.
+  - >
+    The prompts Northbeam publishes ("Meta ROAS last week vs prior week", "top 10 orders by
+    revenue", "spend and revenue by platform for the last 30 days") map semantically onto the
+    Data Export API (POST /data-export with metrics/breakdowns/attribution-models) and
+    GET /orders, but no tool name was observed, so no row is asserted at any confidence.
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 16
+  rest_operations_with_tool: 0
+  reason_unbound: mcp-tools-list-auth-gated

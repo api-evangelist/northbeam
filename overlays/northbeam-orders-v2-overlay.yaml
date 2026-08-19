@@ -1,0 +1,37 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Northbeam Orders API v2
+  version: 1.0.0
+extends: openapi/northbeam-orders-v2-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: apis.yml + repo artifacts
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: northbeam
+    x-apievangelist-tags:
+    - Orders
+    - Attribution
+    - E-Commerce
+    x-apievangelist-note: Current order-ingestion surface. Writes are natural-key upserts on order_id; PATCH is a strict partial update that fails the whole batch on any unknown order_id.
+    x-apievangelist-spec-source: https://dash.readme.com/api/v1/api-registry/ (ReadMe registry @northbeam-customer-sucess/v2.2)
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/northbeam-authentication.yml
+      conventions: conventions/northbeam-conventions.yml
+      errors: errors/northbeam-problem-types.yml
+      lifecycle: lifecycle/northbeam-lifecycle.yml
+      rate_limits: rate-limits/northbeam-rate-limits.yml
+      sandbox: sandbox/northbeam-sandbox.yml
+      data_model: data-model/northbeam-data-model.yml
+      conformance: conformance/northbeam-conformance.yml
+      mcp: mcp/northbeam-mcp.yml
+- target: $.info
+  update:
+    x-apievangelist-idempotency:
+      mechanism: natural-key upsert
+      key: order_id
+      header: null
+      note: POST /orders is an upsert on order_id, so replays are safe. PATCH /orders is NOT — it requires every order_id to already exist and fails the entire batch otherwise.

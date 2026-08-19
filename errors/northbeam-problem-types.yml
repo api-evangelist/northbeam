@@ -1,0 +1,170 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/northbeam-orders-v2-openapi.yml, openapi/northbeam-orders-v1-openapi.yml, openapi/northbeam-spend-v1-openapi.yml, openapi/northbeam-data-export-v1-openapi.yml
+enriched_from:
+  - https://docs.northbeam.io/docs/errors.md
+  - https://docs.northbeam.io/docs/orders-api-limits.md
+format: proprietary
+rfc9457: false
+rfc9457_note: >
+  No Northbeam response declares application/problem+json and no spec carries a `type`/
+  `title`/`detail`/`instance` envelope. Three different proprietary error shapes are
+  published across three APIs — see envelopes[] below.
+
+envelopes:
+  - surface: Orders API (v1 and v2)
+    fields:
+      status: string — the error code
+      response: >
+        JSON-encoded string or plain string. For known/common errors, an array of objects
+        with order_id, a human-readable message, and the json_path of the failing attribute.
+    source: https://docs.northbeam.io/docs/errors.md
+  - surface: Spend API
+    schema: RequestError
+    fields:
+      detail: array of {loc (ErrorLoc), msg, type}
+    source: openapi/northbeam-spend-v1-openapi.yml
+  - surface: Data Export API
+    schema: Error
+    fields:
+      error: string
+    source: openapi/northbeam-data-export-v1-openapi.yml
+  - surface: rate limiting (Orders API)
+    fields:
+      error: 'rate_limit_error'
+      retry_after_seconds: integer
+    headers:
+      - Retry-After
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+
+problems:
+  - status: 400
+    title: Invalid input
+    surface: Orders API
+    remediation: >
+      Verify the JSON is well formed. Northbeam documents that a bare 400 "Bad Request" with
+      no error message is normally malformed JSON. Otherwise read `response` for the
+      per-order json_path of the failing attribute.
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#POST /orders
+      - openapi/northbeam-orders-v1-openapi.yml#POST /orders
+  - status: 400
+    title: Invalid input - validation error or order not found
+    surface: Orders API (PATCH)
+    remediation: >
+      PATCH is not an upsert. Every order_id in the batch must already exist; the whole batch
+      is rejected if any does not. Create missing orders with POST /orders first.
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#PATCH /orders
+  - status: 400
+    title: Validation error
+    surface: Order aliases
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#POST /orders/aliases (addOrderAliases)
+  - status: 401
+    title: Unauthenticated
+    surface: all
+    remediation: >
+      Send both headers: Authorization (the API key) and Data-Client-ID (the account UUID).
+      Missing or mismatched Data-Client-ID is as common a cause as a bad key.
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#POST /orders
+      - openapi/northbeam-orders-v2-openapi.yml#PATCH /orders
+      - openapi/northbeam-orders-v2-openapi.yml#GET /orders
+      - openapi/northbeam-orders-v1-openapi.yml#POST /orders
+      - openapi/northbeam-orders-v1-openapi.yml#GET /orders
+      - openapi/northbeam-spend-v1-openapi.yml#(all six operations)
+      - openapi/northbeam-data-export-v1-openapi.yml#(all five operations)
+  - status: 404
+    title: One or more order_ids not found
+    surface: Order aliases
+    remediation: Aliases can only be attached to orders that already exist.
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#POST /orders/aliases (addOrderAliases)
+  - status: 413
+    title: Payload too large
+    surface: Orders API (PATCH)
+    remediation: >
+      Split the batch. The documented hard cap is 1,000 orders per call, and a 30 MB
+      request-body budget per API key per 60 seconds is shared across POST /v1/orders,
+      POST /v2/orders and PATCH /v2/orders.
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#PATCH /orders
+  - status: 422
+    title: The request body is invalid
+    surface: Spend API
+    schema: RequestError
+    remediation: >
+      Read `detail[].loc` for the failing field path and `detail[].type` for the constraint.
+    source_operations:
+      - openapi/northbeam-spend-v1-openapi.yml#GET /spend
+      - openapi/northbeam-spend-v1-openapi.yml#POST /spend
+      - openapi/northbeam-spend-v1-openapi.yml#DELETE /spend
+      - openapi/northbeam-spend-v1-openapi.yml#GET /spend_hourly
+      - openapi/northbeam-spend-v1-openapi.yml#POST /spend_hourly
+      - openapi/northbeam-spend-v1-openapi.yml#DELETE /spend_hourly
+  - status: 422
+    title: Invalid Body Params
+    surface: Data Export API
+    source_operations:
+      - openapi/northbeam-data-export-v1-openapi.yml#POST /data-export
+  - status: 429
+    title: Too many requests
+    surface: Data Export API
+    remediation: >
+      Documented ceilings are 60 req/minute on /data-export and 100 req/second on
+      /data-export/result, /breakdowns, /attribution-models and /metrics.
+    source_operations:
+      - openapi/northbeam-data-export-v1-openapi.yml#POST /data-export
+      - openapi/northbeam-data-export-v1-openapi.yml#GET /data-export/result/{export_id}
+      - openapi/northbeam-data-export-v1-openapi.yml#GET /breakdowns
+      - openapi/northbeam-data-export-v1-openapi.yml#GET /attribution-models
+      - openapi/northbeam-data-export-v1-openapi.yml#GET /metrics
+  - status: 429
+    title: rate_limit_error
+    surface: Orders API
+    code: rate_limit_error
+    headers:
+      - Retry-After
+    body: '{"error": "rate_limit_error", "retry_after_seconds": 37}'
+    remediation: >
+      Sleep for retry_after_seconds (or the Retry-After header) then retry. The budget is
+      30 MB of request body per API key per rolling 60 seconds, shared across all three
+      order-write endpoints.
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+  - status: 4XX
+    title: An unexpected error occurred
+    surface: Spend API
+    note: wildcard range response declared in the spec, no specific code
+    source_operations:
+      - openapi/northbeam-spend-v1-openapi.yml#(all six operations)
+  - status: 500
+    title: Server error
+    surface: Orders API
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#POST /orders
+      - openapi/northbeam-orders-v2-openapi.yml#PATCH /orders
+      - openapi/northbeam-orders-v1-openapi.yml#POST /orders
+  - status: 500
+    title: Could not fetch
+    surface: Orders API (GET)
+    source_operations:
+      - openapi/northbeam-orders-v2-openapi.yml#GET /orders
+      - openapi/northbeam-orders-v1-openapi.yml#GET /orders
+  - status: 500
+    title: Internal server error
+    surface: Data Export API
+    source_operations:
+      - openapi/northbeam-data-export-v1-openapi.yml#(all five operations)
+  - status: 5XX
+    title: An unexpected error occurred
+    surface: Spend API
+    note: wildcard range response declared in the spec
+    source_operations:
+      - openapi/northbeam-spend-v1-openapi.yml#(all six operations)
+
+coverage:
+  problem_count: 15
+  operations_with_4xx: 16
+  operations_total: 16
+  distinct_status_codes: [400, 401, 404, 413, 422, 429, 500]

@@ -1,65 +1,167 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.northbeam.io/docs/orders-api-limits.md
 name: Northbeam API Rate Limits
-description: Rate limits enforced across Northbeam's API surface including the Orders API, Spend API, and Data Export API.
+description: >
+  Published rate limits across Northbeam's three REST surfaces. The Orders API is limited by
+  request-body BYTES over a sliding window rather than by request count — an unusual shape
+  that a naive requests-per-minute limiter will not respect. The Data Export API is limited by
+  request count, and the Spend API is documented as having no time-window limit at all.
 specificationVersion: '0.1'
-url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+url: https://docs.northbeam.io/docs/orders-api-limits.md
+docs:
+  - https://docs.northbeam.io/docs/orders-api-limits.md
+  - https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+  - https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+limit_count: 8
+
 limits:
-  - api: Data Export API
-    endpoint: /v1/exports/data-export
-    method: POST
-    requests: 60
-    window: minute
-    notes: Most restrictive endpoint. Initiates async data exports; poll for results separately.
-  - api: Data Export API
-    endpoint: /v1/exports/data-export/result/{export_id}
-    method: GET
-    requests: 100
-    window: second
-    notes: Poll status endpoint for export completion. Returns PENDING, SUCCESS, or ERROR.
-  - api: Data Export API
-    endpoint: /v1/exports/breakdowns
-    method: GET
-    requests: 100
-    window: second
-    notes: Retrieve available breakdown labels for data grouping.
-  - api: Data Export API
-    endpoint: /v1/exports/attribution-models
-    method: GET
-    requests: 100
-    window: second
-    notes: Fetch available attribution models for use in export requests.
-  - api: Data Export API
-    endpoint: /v1/exports/metrics
-    method: GET
-    requests: 100
-    window: second
-    notes: Retrieve available performance metrics for inclusion in exports.
   - api: Orders API
-    endpoint: /v2/orders
-    method: POST
-    batchSize: 1000
-    notes: Maximum 1,000 orders per request. No explicit per-minute rate limit documented; recommend submitting at 2x pipeline cadence.
+    endpoint: POST /v1/orders
+    scope: per API key
+    limit: 30
+    limit_unit: MB of request body
+    window: 60 seconds
+    window_type: sliding
+    shared_budget: orders-write
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+  - api: Orders API
+    endpoint: POST /v2/orders
+    scope: per API key
+    limit: 30
+    limit_unit: MB of request body
+    window: 60 seconds
+    window_type: sliding
+    shared_budget: orders-write
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+  - api: Orders API
+    endpoint: PATCH /v2/orders
+    scope: per API key
+    limit: 30
+    limit_unit: MB of request body
+    window: 60 seconds
+    window_type: sliding
+    shared_budget: orders-write
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+  - api: Data Export API
+    endpoint: POST /v1/exports/data-export
+    scope: per account
+    limit: 60
+    limit_unit: requests
+    window: 1 minute
+    notes: >
+      The tightest limit in the API — ~360x tighter than the polling endpoints. Consolidate
+      fan-out jobs into fewer, wider exports with breakdowns[].
+    source: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+  - api: Data Export API
+    endpoint: GET /v1/exports/data-export/result/{export_id}
+    scope: per account
+    limit: 100
+    limit_unit: requests
+    window: 1 second
+    source: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+  - api: Data Export API
+    endpoint: GET /v1/exports/breakdowns
+    scope: per account
+    limit: 100
+    limit_unit: requests
+    window: 1 second
+    source: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+  - api: Data Export API
+    endpoint: GET /v1/exports/attribution-models
+    scope: per account
+    limit: 100
+    limit_unit: requests
+    window: 1 second
+    source: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+  - api: Data Export API
+    endpoint: GET /v1/exports/metrics
+    scope: per account
+    limit: 100
+    limit_unit: requests
+    window: 1 second
+    source: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md
+
+no_time_window_limit:
   - api: Spend API
-    endpoint: /v1/spend_hourly
-    method: POST
-    batchSize: 1000
-    notes: Maximum 1,000 spend records per API call. No documented time-window rate limit; split larger batches into multiple requests.
+    endpoints:
+      - POST /v1/spend
+      - POST /v1/spend_hourly
+    quote: >
+      "Our current API accepts spend entries in batches of up to 1000 per API call… There are
+      no concurrency or daily/hourly limits in place."
+    source: https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+
+batch_limits:
+  - api: Orders API
+    endpoint: POST /v2/orders
+    max_items: 1000
+    unit: orders per request
+    source: https://docs.northbeam.io/docs/orders-api-limits.md
+  - api: Spend API
+    endpoint: POST /v1/spend, POST /v1/spend_hourly
+    max_items: 1000
+    unit: spend records per request
+    source: https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+
+runtime_signals:
+  request_headers: []
+  response_headers:
+    - name: Retry-After
+      on: 429
+      value: seconds until the caller may retry
+      apis: [Orders API]
+  budget_headers:
+    published: false
+    note: >
+      Northbeam publishes NO X-RateLimit-* or RateLimit-* headers. A caller cannot observe how
+      much of the 30 MB / 60 s budget remains until it is refused. This is the single largest
+      runtime-semantics gap on the API.
+  status_on_exhaustion: 429
+  bodies_on_exhaustion:
+    - api: Orders API
+      body: '{"error": "rate_limit_error", "retry_after_seconds": 37}'
+      source: https://docs.northbeam.io/docs/orders-api-limits.md
+    - api: Data Export API
+      body: '{"error": "<string>"}'
+      description: Too many requests
+      note: no retry_after_seconds field is documented for this API
+      source: openapi/northbeam-data-export-v1-openapi.yml
+
 authentication:
-  type: API Key + Client ID
+  type: API key + client id (two headers)
   headers:
     - name: Authorization
-      description: Your API key, passed as Basic auth value
+      description: The API key issued in the Northbeam dashboard
     - name: Data-Client-ID
-      description: Your unique client identifier from the Northbeam dashboard
+      description: The account UUID identifying the customer
   errorCodes:
     - code: 401
-      description: Authentication failure — verify Authorization header and Data-Client-ID are correct
+      description: Authentication failure — verify BOTH the Authorization header and Data-Client-ID
+    - code: 413
+      description: Payload too large (PATCH /v2/orders) — split the batch
     - code: 422
-      description: Invalid request body — check payload structure and required fields
+      description: Invalid request body — Spend and Data Export APIs
     - code: 429
-      description: Rate limit exceeded — back off and retry after the rate limit window resets
+      description: Rate limit exceeded — honor Retry-After / retry_after_seconds
+
 environments:
   - name: Production
     baseURL: https://api.northbeam.io
-  - name: Sandbox (UAT)
+  - name: UAT (testing)
     baseURL: https://api-uat.northbeam.io
-    notes: Validates payload structure but does not persist data
+    notes: >
+      Validates payload structure but persists nothing and does not feed attribution. No UAT
+      host is declared for the Data Export API.
+
+cross_ref:
+  conventions: conventions/northbeam-conventions.yml
+  errors: errors/northbeam-problem-types.yml
+  plans: plans/northbeam-plans-pricing.yml
+
+x-changes-this-round: >
+  Upgraded from an unmarked artifact to method: searched. The previous version recorded "No
+  explicit per-minute rate limit documented" for the Orders and Spend APIs and asserted a
+  60/minute + 100/second table without a byte budget. Northbeam updated the Orders limits page
+  on 2026-08-11 to publish a 30 MB / 60 s per-key sliding window shared across all three
+  order-write endpoints, plus a 429 body and Retry-After header. Those are now recorded.

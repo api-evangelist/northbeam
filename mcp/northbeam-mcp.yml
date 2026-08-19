@@ -1,0 +1,83 @@
+generated: '2026-08-13'
+method: searched
+status: published
+source: https://docs.northbeam.io/docs/connect-northbeam-to-claude.md
+docs:
+  - https://docs.northbeam.io/docs/connect-northbeam-to-claude.md
+  - https://docs.northbeam.io/docs/connect-northbeam-to-chatgpt.md
+name: Northbeam MCP
+description: >
+  Northbeam ships a first-party remote MCP server that gives an agent read-only access to
+  the caller's Northbeam dashboards — performance, attribution, spend and orders. Northbeam
+  documents it as a custom connector for Claude (web, Desktop, Code) and ChatGPT, and states
+  the connection is read-only: an agent can query and summarize Northbeam data but cannot
+  change anything in Northbeam.
+deployment:
+  mode: remote
+  endpoint: https://mcp.northbeam.io
+  auth: oauth
+  verified: probed
+server:
+  name: Northbeam
+  transport: http
+  url: https://mcp.northbeam.io
+  install_claude_code: claude mcp add --scope user --transport http Northbeam https://mcp.northbeam.io
+access:
+  entitlement: Pro and Enterprise customers only
+  entitlement_source: https://docs.northbeam.io/docs/connect-northbeam-to-claude.md
+  plan_note: >
+    The pricing page lists "Unlimited users, data exports, integrations, and MCP access"
+    under the Professional tier; the docs callout says "Northbeam MCP is currently
+    available to Pro and Enterprise customers."
+  read_only: true
+authentication:
+  type: oauth2
+  spec: RFC 9728 protected-resource metadata + RFC 8414 authorization-server metadata
+  issuer: https://mcp.northbeam.io
+  authorization_endpoint: https://auth.northbeam.io/authorize?audience=https%3A%2F%2Fmcp.northbeam.io
+  token_endpoint: https://auth.northbeam.io/oauth/token
+  registration_endpoint: https://mcp.northbeam.io/register
+  jwks_uri: https://auth.northbeam.io/.well-known/jwks.json
+  dynamic_client_registration: true
+  grant_types:
+    - authorization_code
+    - refresh_token
+  pkce: S256
+  scopes:
+    - access:mcp
+    - offline_access
+  bearer_methods:
+    - header
+  identity_provider: Auth0 (auth.northbeam.io)
+  well_known:
+    - well-known/northbeam-oauth-authorization-server.json
+    - well-known/northbeam-oauth-protected-resource.json
+tools:
+  status: gated
+  count: null
+  note: >
+    NO TOOL LIST IS RECORDED because none could be observed and Northbeam publishes none.
+    An anonymous POST of {"jsonrpc":"2.0","id":1,"method":"tools/list"} to
+    https://mcp.northbeam.io/mcp returns HTTP 401 with
+    WWW-Authenticate: Bearer realm="https://mcp.northbeam.io", scope="access:mcp".
+    Northbeam's own connector docs never enumerate the tools — they only give example
+    prompts ("List my Northbeam dashboards", "What was my Meta ROAS last week vs the prior
+    week?", "Show me my top 10 orders by revenue this month", "Break down spend and revenue
+    by platform for the last 30 days"), and the docs llms.txt has no MCP tool reference page.
+    Real tool names and inputSchemas require an authenticated tools/list against a
+    Pro/Enterprise account. Nothing is guessed here.
+x-evidence:
+  - url: https://mcp.northbeam.io/mcp
+    method: POST tools/list
+    http_status: 401
+    body: '{"error":"invalid_request","error_description":"missing bearer token"}'
+    fetched: '2026-08-13'
+  - url: https://mcp.northbeam.io/.well-known/oauth-protected-resource
+    http_status: 200
+    fetched: '2026-08-13'
+  - url: https://mcp.northbeam.io/.well-known/oauth-authorization-server
+    http_status: 200
+    fetched: '2026-08-13'
+  - url: https://docs.northbeam.io/docs/connect-northbeam-to-claude.md
+    http_status: 200
+    fetched: '2026-08-13'

@@ -1,0 +1,67 @@
+generated: '2026-08-13'
+method: searched
+source: registry searches of npm, PyPI, RubyGems, Packagist, crates.io + the north-beam GitHub org
+package_count: 0
+official_package_count: 0
+packages: []
+note: >
+  Northbeam publishes NO first-party client library in any package registry. This is a
+  searched zero, not an unchecked field.
+searches:
+  - registry: npm
+    query: https://registry.npmjs.org/-/v1/search?text=northbeam
+    status: 200
+    matches: 0
+    note: the single result (@hom3chuk/tektek) is an unrelated third-party HAR library
+  - registry: pypi
+    queries:
+      - https://pypi.org/pypi/northbeam/json
+      - https://pypi.org/pypi/northbeam-api/json
+      - https://pypi.org/pypi/northbeam-sdk/json
+    status: 404
+    matches: 0
+  - registry: rubygems
+    query: https://rubygems.org/api/v1/search.json?query=northbeam
+    status: 200
+    matches: 0
+  - registry: packagist
+    query: https://packagist.org/search.json?q=northbeam
+    status: 200
+    matches: 0
+  - registry: crates.io
+    query: https://crates.io/api/v1/crates?q=northbeam
+    status: 200
+    matches: 0
+  - registry: github
+    query: https://api.github.com/orgs/north-beam/repos
+    status: 200
+    matches: 0
+    note: >
+      The public org holds four repos — a Magento plugin last pushed 2024-08-16, a .github
+      profile repo, and two forks of open-swe (an open-source coding agent). No SDK, no CLI,
+      no MCP source. The MCP server's own protected-resource metadata points at
+      https://github.com/north-beam/northbeam-mcp/blob/main/docs/auth.md, which returns 404 —
+      that repository is private or does not exist, so the documentation URL Northbeam
+      advertises in its RFC 9728 metadata is dead.
+distribution:
+  - name: Northbeam Pixel
+    kind: cdn-hosted browser script
+    registry: cdn
+    url: https://j.northbeam.io/ota-sp/{DATA_CLIENT_ID}.js
+    version: null
+    published: null
+    official: true
+    note: >
+      The tracking pixel is the only first-party code Northbeam distributes. It is served
+      per-tenant from a CDN path templated on the Data Client ID and is UNPINNED — there is
+      no version in the URL and no registry metadata endpoint to query, so neither Northbeam
+      nor the integrator can state which build a given site is running. Documented at
+      https://docs.northbeam.io/docs/non-shopify-installation.md, with an explicit
+      instruction not to modify the script. Captured as a component, not a package —
+      see components/northbeam-components.yml.
+integration_reality: >
+  With no SDK in any language, every REST integration is hand-rolled against the four
+  OpenAPI documents. The ReadMe reference console generates copy-paste snippets for Shell,
+  Ruby, PHP, Python and others, which is the closest thing to a client library Northbeam
+  offers. The agent surface is the exception: the MCP server needs no SDK at all, which is
+  a plausible reason Northbeam invested there instead.

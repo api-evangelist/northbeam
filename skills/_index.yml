@@ -1,0 +1,54 @@
+generated: '2026-08-13'
+method: generated
+source: openapi/*.yml + docs.northbeam.io
+description: >
+  Packaged Agent Skills for Northbeam's three REST surfaces. Every operation referenced below
+  exists in a Northbeam-published OpenAPI document harvested into openapi/ — nothing is
+  invented. Northbeam publishes no AGENTS.md and no skills of its own; a search of
+  docs.northbeam.io and the north-beam GitHub org found none, so these are generated.
+skills:
+  - name: northbeam-sync-orders
+    file: northbeam-sync-orders.md
+    api: northbeam:orders-api
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    summary: Send order and revenue data to Northbeam as the ground truth for MTA and MMM.
+    operations:
+      - POST /orders
+      - PATCH /orders (patchOrders)
+      - GET /orders
+      - POST /orders/aliases (addOrderAliases)
+  - name: northbeam-sync-ad-spend
+    file: northbeam-sync-ad-spend.md
+    api: northbeam:spend-api
+    spec: openapi/northbeam-spend-v1-openapi.yml
+    summary: Upload spend for non-integrated ad channels at daily or hourly grain.
+    operations:
+      - POST /spend
+      - GET /spend
+      - DELETE /spend
+      - POST /spend_hourly
+      - GET /spend_hourly
+      - DELETE /spend_hourly
+  - name: northbeam-export-attribution-data
+    file: northbeam-export-attribution-data.md
+    api: northbeam:data-export-api
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    summary: Async submit-then-poll export of attribution metrics, breakdowns and models.
+    operations:
+      - GET /metrics
+      - GET /breakdowns
+      - GET /attribution-models
+      - POST /data-export
+      - GET /data-export/result/{export_id}
+not_covered:
+  - surface: MCP (https://mcp.northbeam.io)
+    reason: >
+      No skill is written for the MCP server because its tools/list is bearer-gated (401) and
+      Northbeam publishes no tool names. A skill grounded in guessed tool names would be
+      fabrication. See mcp/northbeam-mcp.yml.
+cross_ref:
+  conventions: conventions/northbeam-conventions.yml
+  errors: errors/northbeam-problem-types.yml
+  rate_limits: rate-limits/northbeam-rate-limits.yml
+  sandbox: sandbox/northbeam-sandbox.yml
+  authentication: authentication/northbeam-authentication.yml

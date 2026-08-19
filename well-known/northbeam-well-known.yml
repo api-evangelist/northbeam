@@ -1,0 +1,115 @@
+generated: '2026-08-13'
+method: searched
+source: live GET probes of /.well-known/* on every Northbeam host in apis.yml
+note: >
+  Probed six Northbeam hosts. The marketing site (www.northbeam.io) answers every
+  /.well-known/* path with an HTML "Invalid .well-known request" page (404) and the
+  ReadMe docs host answers with its SPA shell (404) — neither is a served document.
+  Real documents exist on the MCP host and the Auth0-backed identity host: the MCP
+  server publishes RFC 8414 authorization-server metadata and RFC 9728 protected-resource
+  metadata anonymously, even though the MCP transport itself is bearer-gated.
+hosts:
+  - host: https://mcp.northbeam.io
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: northbeam-oauth-authorization-server.json
+        spec: RFC 8414
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: northbeam-oauth-protected-resource.json
+        spec: RFC 9728
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+      - path: /.well-known/agent.json
+        status: 401
+  - host: https://auth.northbeam.io
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: northbeam-openid-configuration.json
+        spec: OpenID Connect Discovery 1.0
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        note: identical payload to /.well-known/openid-configuration; not saved separately
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://api.northbeam.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://www.northbeam.io
+    note: every path returns an HTML "Invalid .well-known request" body with status 404
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://docs.northbeam.io
+    note: ReadMe-hosted SPA; HTML shell returned with status 404 on every path
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://api-uat.northbeam.io
+    note: UAT sandbox host; edge returns 403 on /.well-known/* except security.txt (404)
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/agent-card.json
+        status: 403
+      - path: /.well-known/agent.json
+        status: 403
+summary:
+  paths_probed: 40
+  documents_found: 3
+  security_txt: false
+  agent_card: false
+  api_catalog: false

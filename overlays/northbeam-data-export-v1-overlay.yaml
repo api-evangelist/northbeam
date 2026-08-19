@@ -1,0 +1,42 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Northbeam Data Export API v1
+  version: 1.0.0
+extends: openapi/northbeam-data-export-v1-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: apis.yml + repo artifacts
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: northbeam
+    x-apievangelist-tags:
+    - Data Export
+    - Attribution
+    - Performance Metrics
+    - ROAS
+    x-apievangelist-note: Asynchronous submit-then-poll export of attribution metrics. Three reference endpoints (/metrics, /breakdowns, /attribution-models) enumerate the legal values for an export request.
+    x-apievangelist-spec-source: https://dash.readme.com/api/v1/api-registry/ (ReadMe registry @northbeam-customer-sucess/v2.2)
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/northbeam-authentication.yml
+      conventions: conventions/northbeam-conventions.yml
+      errors: errors/northbeam-problem-types.yml
+      lifecycle: lifecycle/northbeam-lifecycle.yml
+      rate_limits: rate-limits/northbeam-rate-limits.yml
+      sandbox: sandbox/northbeam-sandbox.yml
+      data_model: data-model/northbeam-data-model.yml
+      conformance: conformance/northbeam-conformance.yml
+      mcp: mcp/northbeam-mcp.yml
+- target: $.info
+  update:
+    x-apievangelist-async:
+      pattern: submit-then-poll
+      submit: POST /data-export
+      poll: GET /data-export/result/{export_id}
+      states:
+      - PENDING
+      - SUCCESS
+      - ERROR
+      webhook: false

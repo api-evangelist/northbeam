@@ -1,0 +1,171 @@
+# Northbeam Documentation Documentation
+
+> User guides, technical info, and documentation about Northbeam.
+
+## Guides
+- [What is Northbeam? Start here.](https://docs.northbeam.io/docs/what-is-northbeam.md): How Northbeam works and what you need to get started.
+- [New to the Team? Here's How to Get Oriented in Northbeam](https://docs.northbeam.io/docs/new-to-northbeam-how-to-get-oriented.md)
+- [Navigating Northbeam: Your Guided Ramp-Up](https://docs.northbeam.io/docs/navigating-northbeam.md)
+- [🏠 Overview Home Page](https://docs.northbeam.io/docs/overview-page.md): This is your Northbeam starting point.
+- [📊 Attribution Home Page](https://docs.northbeam.io/docs/attribution-page.md): This is your operational hub.
+- [💰 Sales](https://docs.northbeam.io/docs/sales.md): Your hub for day-to-day decisions
+- [🌡️ Product Analytics](https://docs.northbeam.io/docs/product-analytics.md): Data-driven e-commerce merchandising and more.
+- [📦 Orders](https://docs.northbeam.io/docs/orders-tracking.md): Customer journey tracking.
+- [🎨 Creative Analytics](https://docs.northbeam.io/docs/creative-analytics.md): An overview of creative ads.
+- [🔭 Metrics Explorer Home Page](https://docs.northbeam.io/docs/metrics-explorer.md): Understand the power of Northbeam's correlation visualization dashboard.
+- [🚀 Metrics Explorer Quickstart Guide](https://docs.northbeam.io/docs/metrics-explorer-quickstart-guide.md): First time using Metrics Explorer? Start here.
+- [🔭 Metrics Explorer Best Practices: 7 Tips](https://docs.northbeam.io/docs/metrics-explorer-best-practices-7-tips.md): Pro tips for using the Metrics Explorer dashboard in Northbeam.
+- [🧐 Best Practices by Teams and Departments](https://docs.northbeam.io/docs/best-practices-by-teams-and-departments.md): Proven strategies and tips to help you get the most out of Northbeam.
+- [📱 Paid Social Team](https://docs.northbeam.io/docs/paid-social-team.md)
+- [🔎 Paid Search Team](https://docs.northbeam.io/docs/paid-search-team.md)
+- [🔝 Executive Team](https://docs.northbeam.io/docs/executive-team.md): This guide is especially useful for CMOs, CFOS, and CEOs.
+- [📧 Email/SMS/Retention Team](https://docs.northbeam.io/docs/email-sms-retention.md)
+- [🌚 Offline Channel](https://docs.northbeam.io/docs/offline-channel.md)
+- [🤳 Influencer](https://docs.northbeam.io/docs/influencer.md)
+- [⚡ Northbeam 3.0](https://docs.northbeam.io/docs/northbeam-30.md)
+- [🏍️ Northbeam Apex](https://docs.northbeam.io/docs/northbeam-apex.md): Optimize your Meta ads against first-party Northbeam data with this new integration.
+- [Enable Apex for Meta](https://docs.northbeam.io/docs/setting-up-apex.md): Prepare your Meta account for Custom Attribution.
+- [Set up a Meta Custom Attribution Campaign](https://docs.northbeam.io/docs/setting-up-a-meta-custom-attribution-campaign.md): Get started with Meta's Custom Attribution using Northbeam Apex.
+- [Apex FAQs](https://docs.northbeam.io/docs/apex-faqs.md): Frequently asked questions about Northbeam Apex.
+- [🧬 Clicks + Deterministic Views (C+DV)](https://docs.northbeam.io/docs/clicks-deterministic-views.md): Understanding Northbeam's most innovative attribution model.
+- [💸 Profit Benchmarks](https://docs.northbeam.io/docs/profitability-benchmarks.md): A step-by-step guide to our new benchmarking tool.
+- [📂 Touchpoints Export](https://docs.northbeam.io/docs/touchpoints-export.md): A step-by-step guide to our touchpoints export.
+- [❓Frequently Asked Questions](https://docs.northbeam.io/docs/frequently-asked-questions.md): Here are quick and clear answers to help you navigate Northbeam.
+- [What is Northbeam's MTA Methodology?](https://docs.northbeam.io/docs/what-is-northbeam-mta-methodology.md): What makes Northbeam's MTA unique?
+- [Why is Northbeam's Methodology better than our internal reporting platforms?](https://docs.northbeam.io/docs/why-is-the-northbeam-methodology-better-than-internal-platforms.md): What makes Northbeam MTA unique?
+- [How does Northbeam track Orders and Ads?](https://docs.northbeam.io/docs/how-does-northbeam-track-orders-and-ads.md): How does Northbeam data work?
+- [What is a good/bad number in Northbeam?](https://docs.northbeam.io/docs/what-is-a-good-bad-number-in-northbeam.md): How do I correctly measure my performance?
+- [What is Northbeam's Model Comparison Tool?](https://docs.northbeam.io/docs/what-is-northbeam-model-comparison-tool.md): How can it measure MTA models as well as data from outside of Northbeam?
+- [Case scenario: Cash snapshot vs Accrual performance](https://docs.northbeam.io/docs/case-scenario-cash-vs-accrual.md)
+- [Case scenario: Clicks + Modeled Views vs Clicks-Only](https://docs.northbeam.io/docs/case-scenario-clicks-views-vs-clicks-only.md)
+- [My FB ROAS is 0.7 in Northbeam, is this normal?](https://docs.northbeam.io/docs/my-facebook-roas-is-07-in-northbeam-is-this-normal.md): Why are the Northbeam numbers different?
+- [Why is my FB ROAS so much lower in Northbeam?](https://docs.northbeam.io/docs/why-is-my-fb-roas-so-much-lower-in-northbeam.md)
+- [How do I correctly and confidently interpret non-click channels?](https://docs.northbeam.io/docs/how-do-i-correctly-confidently-interpret-non-click-channels.md): What’s normal and expected?
+- [Why is so much of my revenue “unattributed”?](https://docs.northbeam.io/docs/why-is-so-much-of-my-revenue-unattributed.md)
+- [What's the difference between Organic vs Unattributed?](https://docs.northbeam.io/docs/whats-the-difference-between-organic-vs-unattributed.md)
+- [What’s the difference between Blotout and Northbeam—and do I need both?](https://docs.northbeam.io/docs/difference-between-blotout-and-northbeam-do-i-need-both.md): Understanding How Northbeam and Blotout Work Together.
+- [Attribution Models](https://docs.northbeam.io/docs/attribution-models.md): Our Attribution Models are one of the most important concepts to understand.
+- [Attribution Windows](https://docs.northbeam.io/docs/attribution-windows.md): We offer a variety of Attribution Windows to help inform your decision-making
+- [Accounting Modes](https://docs.northbeam.io/docs/accounting-modes.md): Our Accounting Modes are settings within the platform that determine when conversion and revenue credit are given.
+- [How Credit Is Assigned in Northbeam](https://docs.northbeam.io/docs/credit-allocation-examples.md)
+- [Northbeam Metrics 101](https://docs.northbeam.io/docs/northbeam-metrics-101.md): Use this guide to understand our metrics
+- [Subscription Metrics](https://docs.northbeam.io/docs/subscription-metrics.md)
+- [Manage Breakdowns and Saved Views](https://docs.northbeam.io/docs/manage-breakdowns.md)
+- [Lookback Windows](https://docs.northbeam.io/docs/lookback-windows.md): Northbeam now allows you to **set a lookback window** for how far back we consider touchpoints when attributing orders.
+- [What To Expect During Implementation](https://docs.northbeam.io/docs/what-to-expect-during-implementation.md)
+- [Confirm Setup Requirements](https://docs.northbeam.io/docs/confirm-setup-requirements.md)
+- [Multi-region configuration](https://docs.northbeam.io/docs/multi-region-configuration.md): Setup Northbeam across multiple regions.
+- [Multi-business configuration](https://docs.northbeam.io/docs/multi-brand-configuration.md): Setup Northbeam for multiple businesses.
+- [Multi-domain configuration](https://docs.northbeam.io/docs/multi-domain-configuration.md): Setup Northbeam for multiple domains.
+- [Setting Up Multiple Stores or Regions](https://docs.northbeam.io/docs/adding-a-store-or-dashboard.md): Use this page if you operate more than one store, brand, or region and want to understand how to structure your Northbeam setup.
+- [Multi-Dashboard Setup with Configurators](https://docs.northbeam.io/docs/multi-dashboard-setup-with-configurators.md): Split your data across multiple Northbeam dashboards — while maintaining first-party tracking on a single domain
+- [1. Welcome to Northbeam!](https://docs.northbeam.io/docs/implementation-guide.md): Getting started with your onboarding here.
+- [Dashboard Access](https://docs.northbeam.io/docs/create-a-dashboard.md)
+- [Shopify Overview](https://docs.northbeam.io/docs/shopify-overview.md)
+- [All Other Platforms Overview](https://docs.northbeam.io/docs/all-other-platforms-overview.md): This page will help you get started with Northbeam's API.
+- [2. Invite Team](https://docs.northbeam.io/docs/invite-team.md)
+- [3. Business Information](https://docs.northbeam.io/docs/business-information.md): Add your basic details about you and your company.
+- [4. Currency](https://docs.northbeam.io/docs/currency.md): Select reporting currency
+- [5. Add Domain](https://docs.northbeam.io/docs/add-domain.md): Set your top-level domain for your dashboard
+- [6. Link DNS](https://docs.northbeam.io/docs/link-dns.md): Configure DNS record for Northbeam
+- [7. Pixel and Event Tracking](https://docs.northbeam.io/docs/add-pixel.md): Complete Pixel Placement
+- [Shopify Installation](https://docs.northbeam.io/docs/shopify-installation.md): Add the Northbeam pixel to your Shopify storefront
+- [All Other Platforms Installation](https://docs.northbeam.io/docs/non-shopify-installation.md): Add the Northbeam pixel to your storefront
+- [Custom Goals](https://docs.northbeam.io/docs/setting-up-custom-goals.md)
+- [Page View Events](https://docs.northbeam.io/docs/page-view-events.md)
+- [Third-Party Checkouts](https://docs.northbeam.io/docs/third-party-checkouts.md)
+- [Additional Events](https://docs.northbeam.io/docs/optional-additional-methods.md)
+- [8. Add Orders](https://docs.northbeam.io/docs/add-orders.md)
+- [Subscription Analytics](https://docs.northbeam.io/docs/subscription-analytics.md)
+- [Order Tags](https://docs.northbeam.io/docs/order-tags.md)
+- [Shopify](https://docs.northbeam.io/docs/shopify-order-sync.md): Connect your Shopify orders data to your Northbeam dashboard
+- [8b. Tell us if your business will use Order Tags (Shopify)](https://docs.northbeam.io/docs/order-tags-1.md)
+- [8c. Add order tags in Shopify](https://docs.northbeam.io/docs/8c-add-order-tags-in-shopify.md)
+- [8d. Configure Northbeam order exclusions (Shopify)](https://docs.northbeam.io/docs/8d-configure-northbeam-order-exclusions-optional.md)
+- [Orders API](https://docs.northbeam.io/docs/orders-api.md): Learn how to send order data to Northbeam using the Orders API, with steps for setup, validation, backfilling, and monitoring.
+- [9. Integrations and UTMs](https://docs.northbeam.io/docs/integrations-and-utms.md): Connect Integrations and UTMs
+- [Append Northbeam UTMs](https://docs.northbeam.io/docs/8-append-our-utms.md)
+- [10. Add Spend](https://docs.northbeam.io/docs/add-spend.md)
+- [Spend API](https://docs.northbeam.io/docs/spend-api.md): This page describes the usage of our Spend API
+- [Best Practices and Limits](https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md): This page describes the Best Practices and Limitations of our Spend API
+- [Onboarding FAQs](https://docs.northbeam.io/docs/onboarding-faqs.md): This FAQ page is designed to help you get comfortable as you navigate Northbeam's MTA
+- [Why Doesn't Northbeam Match My Shopify Reporting?](https://docs.northbeam.io/docs/why-doesnt-northbeam-match-my-shopify-reporting.md): Learn why Northbeam Total Revenue and Orders may differ from Shopify and how to compare the two using an apples-to-apples Shopify Orders export.
+- [Troubleshooting Tracking Issues](https://docs.northbeam.io/docs/troubleshooting-tracking-issues.md): How to fix tracking issues.
+- [Troubleshooting Pixel Tracking](https://docs.northbeam.io/docs/guide-to-troubleshooting-pixel-tracking.md)
+- [Checking UTM Tracking](https://docs.northbeam.io/docs/checking-utm-tracking.md)
+- [Checking Ad Platform Connections](https://docs.northbeam.io/docs/checking-api-connections.md)
+- [Gclid, Fbclid, and Redirects](https://docs.northbeam.io/docs/gclid-fbclid-redirects.md)
+- [Differences in Unattributed Data](https://docs.northbeam.io/docs/differences-in-unattributed-data.md)
+- [Differences in Visits and Journeys](https://docs.northbeam.io/docs/differences-in-visits.md): Understand differences in visit counts between Northbeam and other web tracking technologies
+- [Differences in Ad Spend](https://docs.northbeam.io/docs/differences-in-ad-data.md): Learn how to troubleshoot differences in ad spend and missing campaigns.
+- [Differences in Ad Performance](https://docs.northbeam.io/docs/differences-ad-performance.md)
+- [SFTP Orders Upload](https://docs.northbeam.io/docs/sftp-orders-upload.md)
+- [Shopify Migration: Preserving Customer Stages](https://docs.northbeam.io/docs/shopify-migration-preserving-customer-stages.md)
+- [Tracking for Google + YouTube Ads](https://docs.northbeam.io/docs/setting-up-google-ads-for-northbeam.md)
+- [Tracking for AppLovin](https://docs.northbeam.io/docs/applovin.md)
+- [Tracking for Klaviyo](https://docs.northbeam.io/docs/setting-up-klaviyo-for-northbeam.md)
+- [Tracking for Meta Ads](https://docs.northbeam.io/docs/setting-up-facebook-ads-tracking.md)
+- [UTMs for Legacy Platforms](https://docs.northbeam.io/docs/facebook-utms-for-legacy-platforms.md)
+- [Tracking for TikTok Ads](https://docs.northbeam.io/docs/setting-up-tiktok-ads-for-northbeam.md)
+- [Tracking for X Ads](https://docs.northbeam.io/docs/tracking-for-x-ads.md)
+- [Tracking for Snapchat Ads](https://docs.northbeam.io/docs/tracking-for-snapchat-ads.md)
+- [Tracking for Pinterest Ads](https://docs.northbeam.io/docs/tracking-for-pinterest-ads.md)
+- [Tracking for Microsoft Ads](https://docs.northbeam.io/docs/tracking-for-microsoft.md)
+- [Tracking for Impact](https://docs.northbeam.io/docs/tracking-for-impact.md)
+- [Tracking for LiveIntent](https://docs.northbeam.io/docs/tracking-for-liveintent.md)
+- [Tracking for Amazon](https://docs.northbeam.io/docs/tracking-for-amazon.md)
+- [Tracking for Attentive](https://docs.northbeam.io/docs/working-tracking-for-attentive.md)
+- [Tracking for TradeDesk](https://docs.northbeam.io/docs/tracking-for-tradedesk.md)
+- [Tracking for Rakuten](https://docs.northbeam.io/docs/tracking-for-rakuten.md)
+- [Tracking for MNTN](https://docs.northbeam.io/docs/tracking-for-mntn.md)
+- [Tracking for Vibe.co](https://docs.northbeam.io/docs/tracking-for-vibe-co.md)
+- [Tracking for ROKT](https://docs.northbeam.io/docs/tracking-for-rokt.md)
+- [Tracking for Tatari](https://docs.northbeam.io/docs/tracking-for-tatari.md)
+- [Tracking for Keynes](https://docs.northbeam.io/docs/tracking-for-keynes.md)
+- [Tracking for Universal](https://docs.northbeam.io/docs/tracking-for-universal.md)
+- [Tracking for Paramount](https://docs.northbeam.io/docs/tracking-for-paramount.md)
+- [Tracking for Bliss Point by Tinuiti](https://docs.northbeam.io/docs/tracking-for-bliss-point-by-tinuiti.md)
+- [Tracking for Non-Integrated Channels](https://docs.northbeam.io/docs/tracking-for-other-platforms.md)
+- [Non-Integrated Channel Setup: Spend API + UTMs](https://docs.northbeam.io/docs/non-integrated-channel-setup-spend-api-utms.md)
+- [Tracking Influencer Performance](https://docs.northbeam.io/docs/tracking-for-influencers.md)
+- [Shops Tracking (Meta Shops, TikTok Shops)](https://docs.northbeam.io/docs/tracking-for-shops.md)
+- [Tracking Ads using Off-Domain Sites](https://docs.northbeam.io/docs/tracking-for-off-domain-sites.md): This guide explains how to track ads that send users to an off-domain site before they reach your main domain.
+- [Northbeam's Data Sources](https://docs.northbeam.io/docs/northbeam-data-sources.md): Where does Northbeam get its data from?
+- [Exporting Data](https://docs.northbeam.io/docs/exporting-data.md)
+- [Data Export](https://docs.northbeam.io/docs/northbeam-api-data-export-1.md): This page describes the usage of our Data Export API
+- [Exporting To GCS](https://docs.northbeam.io/docs/northbeam-api-data-export-gcs-export-1.md): This page describes the Exporting To GCS of our Data Export API
+- [Exporting To S3](https://docs.northbeam.io/docs/northbeam-api-data-export-s3-export-1.md): This page describes the Exporting To S3 of our Data Export API
+- [Rate Limits](https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1.md): This page describes the Rate Limits of our Data Export API
+- [Northbeam's Integrations](https://docs.northbeam.io/docs/integration-matrix.md)
+- [Adding / Removing Ad Accounts](https://docs.northbeam.io/docs/ad-accounts.md)
+- [Adding / Removing Users](https://docs.northbeam.io/docs/adding-or-removing-users-copy.md)
+- [Changing Currency](https://docs.northbeam.io/docs/adding-or-removing-users-copy-1.md)
+- [🛰️ The Media Buyer Newsletter](https://docs.northbeam.io/docs/the-media-buyer-newsletter.md): Sign up for free performance benchmarks in your inbox every week. Meta, TikTok, Applovin and more!
+- [Authentication](https://docs.northbeam.io/docs/authentication.md): Getting authentication credentials to access the Northbeam Orders API
+- [Errors](https://docs.northbeam.io/docs/errors.md)
+- [Getting Started](https://docs.northbeam.io/docs/getting-started.md): This page will help you get started with Northbeam API. If you have any feedback, reach out to success@northbeam.io
+- [Hashing Customer Data](https://docs.northbeam.io/docs/hashing-customer-data.md): Normalization and hashing guidelines for customer email and phone numbers
+- [Order Definition](https://docs.northbeam.io/docs/order-definition.md): This page describes Northbeam's semantic definition of an order and how order attributes play a role in determining Subscription or Returning Customer metrics
+- [Using the API](https://docs.northbeam.io/docs/using-the-api.md): Guidance for Using the Northbeam Orders API
+- [Limits](https://docs.northbeam.io/docs/orders-api-limits.md): This Page describes the limitations of the Orders API and suggested uses
+- [Connect Northbeam to Claude](https://docs.northbeam.io/docs/connect-northbeam-to-claude.md): Use this guide to connect Northbeam to Claude on the web (claude.ai), Claude Desktop, or Claude Code.
+- [Connect Northbeam to Chat GPT](https://docs.northbeam.io/docs/connect-northbeam-to-chatgpt.md): Use this guide to connect Northbeam to ChatGPT.
+
+## API Reference
+- [List spend records](https://docs.northbeam.io/reference/get_spend.md)
+- [Upsert one or multiple spend records](https://docs.northbeam.io/reference/post_spend.md)
+- [Delete a spend record](https://docs.northbeam.io/reference/delete_spend.md)
+- [List spend records](https://docs.northbeam.io/reference/get_spend-hourly.md)
+- [Upsert one or multiple hourly spend records](https://docs.northbeam.io/reference/post_spend-hourly.md)
+- [Delete a spend record](https://docs.northbeam.io/reference/delete_spend-hourly.md)
+- [Upsert a list of orders to Northbeam](https://docs.northbeam.io/reference/post_orders-1.md)
+- [Fetch a list of orders](https://docs.northbeam.io/reference/get_orders-1.md)
+- [Partially update existing orders](https://docs.northbeam.io/reference/patchorders.md): Update specific fields of existing orders. Only fields present in the request payload will be modified. Omitted fields retain their existing values. Use explicit null to clear optional field values.  **Note:** The `products` and `refunds` fields currently cannot be patched. To modify products or refunds, re-submit the full order via POST.  Array fields (order_tags, discount_codes) are replaced entirely when present - no per-item merging is performed.  The entire batch fails if any order_id does not exist or any entry fails validation.
+- [Add aliases to existing orders](https://docs.northbeam.io/reference/addorderaliases.md): Additively attach alternate order IDs to existing orders. Aliases that already exist are silently ignored. Orders must already exist.
+- [Upsert a list of orders to Northbeam](https://docs.northbeam.io/reference/post_orders.md)
+- [Fetch a list of orders](https://docs.northbeam.io/reference/get_orders.md)
+- [Create a data export config](https://docs.northbeam.io/reference/post_data-export-1.md)
+- [Fetch a data export result](https://docs.northbeam.io/reference/get_data-export-result-export-id-1.md)
+- [Fetch all labels available for breakdown](https://docs.northbeam.io/reference/get_breakdowns-1.md)
+- [Fetch all available metrics](https://docs.northbeam.io/reference/get_metrics-1.md)
+- [Fetch all available attribution models](https://docs.northbeam.io/reference/get_attribution-models-1.md)

@@ -1,61 +1,119 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.northbeam.io/pricing
 name: Northbeam Plans and Pricing
-description: Pricing tiers for Northbeam's multi-touch attribution platform, structured around monthly media spend thresholds and feature access levels.
+description: >
+  Northbeam's published plan ladder, banded by the customer's monthly or annual ad spend.
+  Every tier says "Contact us for a quote" — two of the four also display an indicative
+  figure, and two show no number at all. There is no self-serve signup and no online
+  checkout: the pricing page routes to a demo booking or a qualification form.
 specificationVersion: '0.1'
 url: https://www.northbeam.io/pricing
+plan_count: 4
+currency: USD
+self_serve: false
+free_tier: false
+trial: not published
+billing_note: >
+  Prices shown on the page are labeled ambiguously ("$1,500 / for maximum value" on Starter,
+  "$3,500 / per month" on Professional). Only Professional carries an explicit period. The
+  figures are recorded verbatim below with `price_label` preserved rather than normalized,
+  because normalizing them would invent a billing period Northbeam does not state.
+
 plans:
+  - name: Growth
+    description: >
+      For seven-figure brands spending under $200K/month on ads that want Northbeam
+      attribution with hands-on agency support. Sold through a Northbeam agency partner.
+    url: https://www.northbeam.io/pricing
+    price: null
+    price_label: Custom
+    price_note: Contact us for a quote
+    cta: SEE IF YOU QUALIFY
+    audience: seven-figure brands spending under $200K/month on ads
+    features:
+      - Full access to Northbeam multi-touch attribution and dashboards
+      - Creative, strategy and media buying support from a preferred Northbeam agency partner
+      - Preferred Northbeam pricing built into the agency engagement
+      - Up to $50,000 in ad credits from ad platform partners
+    api_access: not stated
   - name: Starter
-    description: Entry-level multi-touch attribution plan for e-commerce brands with lower media spend. Includes Shopify direct integration, creative analytics, and unlimited users.
+    description: >
+      For brands spending less than $1.5M a year on ads who want first-party multi-touch
+      attribution across all channels.
     url: https://www.northbeam.io/pricing
     price: 1500.00
-    unit: month
-    currency: USD
-    billingCycle: monthly
-    audience: Brands with under $1.5M annual media spend
+    price_label: '$1,500 / for maximum value'
+    price_note: Contact us for a quote
+    cta: book a demo
+    audience: brands spending under $1.5M a year on ads
     features:
-      - Multi-Touch Attribution (MTA)
-      - Clicks + Deterministic Views
-      - Apex attribution intelligence
-      - Creative Analytics
-      - Correlation Analysis
-      - Shopify direct integration
-      - Unlimited integrations
-      - Unlimited user accounts
-      - Email support
-      - Product Analytics
-      - Profit Benchmarks
+      - Independent, first-party multi-touch attribution across all ad channels
+      - Customizable omnichannel dashboards
+      - Custom attribution via Northbeam Apex
+      - View-through conversion attribution with Northbeam C+DV
+      - Up to $100,000 in ad credits from ad platform partners
+    api_access: not included
   - name: Professional
-    description: Advanced attribution plan for scaling brands requiring multi-platform integrations, enhanced data refresh rates, and dedicated strategic support including API access.
+    description: >
+      For growth marketers spending up to $500K a month on ads who are testing and expanding
+      into new ad channels. This is the entry point for programmatic access.
     url: https://www.northbeam.io/pricing
-    price: 0.00
-    unit: month
-    currency: USD
-    billingCycle: annual
-    audience: Brands with over $250k per month in media spend
-    contact: https://www.northbeam.io/pricing
+    price: 3500.00
+    price_label: '$3,500 / per month'
+    price_note: Contact us for a quote
+    billingCycle: monthly
+    cta: book a demo
+    audience: growth marketers spending up to $500k/month on ads
     features:
-      - All Starter features
-      - Direct integration with any ecommerce platform
+      - Everything in Starter
+      - Unlimited users, data exports, integrations, and MCP access
+      - Integration with any ecommerce platform, not just Shopify
       - Dedicated Media Strategist
-      - Enhanced data refresh options
-      - Multi-region capability (optional)
-      - Technical support for custom storefronts
-      - API access (Data Export API)
-      - Advanced data exports
+      - More options for data refresh frequencies
+      - Incrementality (optional)
+      - Up to $150,000 in ad credits from ad platform partners
+    api_access: included
+    api_note: >
+      The Data Export API and the MCP server both land here. Northbeam's connector docs
+      independently state "Northbeam MCP is currently available to Pro and Enterprise
+      customers."
   - name: Enterprise
-    description: Full-featured attribution platform with media mix modeling, dedicated success management, highest-frequency data refresh, and Slack-based support for large advertisers.
+    description: >
+      For sophisticated teams spending more than $500K a month on ads, including multi-region
+      and multi-brand configurations and media mix modeling.
     url: https://www.northbeam.io/pricing
-    price: 0.00
-    unit: month
-    currency: USD
-    billingCycle: annual
-    audience: Brands with over $500k per month in media spend
-    contact: https://www.northbeam.io/pricing
+    price: null
+    price_label: Custom
+    price_note: Contact us for a quote
+    cta: book a demo
+    audience: teams spending more than $500k/month on ads
     features:
-      - All Professional features
-      - Dedicated Customer Success Manager
-      - Enhanced Correlation Analysis (Metrics Explorer)
+      - Everything in Professional
+      - Expert media buying guidance from the Media Strategy team
+      - Dedicated Customer Success Manager and Slack channel
+      - Optional hourly conversion data for high-frequency media buying
+      - Granular touchpoint data export for customer journey analysis
+      - Global, international or geo-specific dashboards
+      - Direct integration with any ecommerce platform, including custom builds
       - Media Mix Modeling+ (optional)
-      - Direct Slack channel support
-      - Advanced data exports
-      - Highest-frequency data refresh rates
-      - Custom attribution configuration
+      - Incrementality (optional)
+      - Up to $200,000 in ad credits from ad platform partners
+    api_access: included
+
+metering:
+  model: subscription banded by tracked ad spend
+  per_call_billing: false
+  overage: not published
+  note: >
+    Northbeam does not meter API calls. The cost driver is the customer's monthly media spend
+    band, so API volume has no direct price consequence — only the rate limits constrain it.
+
+x-changes-this-round: >
+  Upgraded from an unmarked artifact to method: searched with the exact pricing URL. The
+  previous version recorded three tiers (Starter/Professional/Enterprise) with Professional
+  and Enterprise both priced 0.00 and billed annually, and attributed API access to
+  Professional as "API access (Data Export API)". The live pricing page now shows FOUR tiers —
+  a new agency-led Growth tier was added ahead of Starter — Professional carries an explicit
+  $3,500/month figure, and the Professional feature line now reads "Unlimited users, data
+  exports, integrations, and MCP access", making the MCP server a priced entitlement.

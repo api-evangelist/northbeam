@@ -1,0 +1,36 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Northbeam Spend API v1
+  version: 1.0.0
+extends: openapi/northbeam-spend-v1-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: apis.yml + repo artifacts
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: northbeam
+    x-apievangelist-tags:
+    - Spend
+    - Ad Platforms
+    - Attribution
+    x-apievangelist-note: Ad-spend ingestion for non-integrated channels. Daily and hourly grains; both are upserts keyed on platform/campaign/adset/ad, which must match the customer UTM tagging for the join to work.
+    x-apievangelist-spec-source: https://dash.readme.com/api/v1/api-registry/ (ReadMe registry @northbeam-customer-sucess/v2.2)
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/northbeam-authentication.yml
+      conventions: conventions/northbeam-conventions.yml
+      errors: errors/northbeam-problem-types.yml
+      lifecycle: lifecycle/northbeam-lifecycle.yml
+      rate_limits: rate-limits/northbeam-rate-limits.yml
+      sandbox: sandbox/northbeam-sandbox.yml
+      data_model: data-model/northbeam-data-model.yml
+      conformance: conformance/northbeam-conformance.yml
+      mcp: mcp/northbeam-mcp.yml
+- target: $.info
+  update:
+    x-apievangelist-idempotency:
+      mechanism: natural-key upsert
+      key: date (or hour_start_iso) + platform_name + campaign_id + adset_id + ad_id
+      header: null

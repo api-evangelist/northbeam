@@ -1,0 +1,207 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/northbeam-orders-v2-openapi.yml, openapi/northbeam-spend-v1-openapi.yml, openapi/northbeam-data-export-v1-openapi.yml
+enriched_from:
+  - https://docs.northbeam.io/docs/order-definition.md
+  - https://docs.northbeam.io/docs/hashing-customer-data.md
+description: >
+  Northbeam's ingestion model has two independent write spines that meet in the attribution
+  engine rather than in the API: ORDERS (revenue ground truth, keyed on a caller-supplied
+  order_id) and SPEND (ad cost, keyed on the platform/campaign/adset/ad hierarchy). Neither
+  references the other by id — the join is performed by Northbeam using the ad-object keys
+  that must also appear in the customer's UTM tagging. Nothing in the specs uses $ref across
+  documents, so the relationships below are derived from id-reference FIELDS and from
+  Northbeam's own documentation of how the join works, not from schema links.
+
+id_conventions:
+  style: caller-supplied natural keys, no Northbeam-issued prefixed ids
+  note: >
+    Unlike providers that mint prefixed object ids, every identifier in the Northbeam write
+    surface originates with the customer (order_id, customer_id, campaign_id, adset_id,
+    ad_id). The one Northbeam-issued identifier in the public surface is export_id, returned
+    by POST /v1/exports/data-export and consumed by GET /v1/exports/data-export/result/{export_id}.
+
+entities:
+  - name: Order
+    schema: Order (items)
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    key: order_id
+    required:
+      - order_id
+      - customer_id
+      - time_of_purchase
+      - currency
+      - purchase_total
+      - tax
+      - products
+      - shipping_cost
+    additional_properties: false
+    fields:
+      - order_id
+      - customer_id
+      - time_of_purchase
+      - customer_email
+      - customer_phone_number
+      - hashed_customer_email
+      - hashed_customer_phone_number
+      - customer_name
+      - customer_ip_address
+      - discount_codes
+      - discount_amount
+      - order_tags
+      - tax
+      - is_recurring_order
+      - currency
+      - purchase_total
+      - products
+      - refunds
+      - customer_shipping_address
+      - shipping_cost
+      - alternate_order_ids
+    operations:
+      - POST /v2/orders (upsert)
+      - PATCH /v2/orders (partial update, patchOrders)
+      - GET /v2/orders
+      - POST /v1/orders (deprecated)
+      - GET /v1/orders (deprecated)
+  - name: Product
+    schema: Order.items.properties.products.items
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    key: id
+    fields: [id, name, quantity, price, variant_id, variant_name]
+    embedded_in: Order
+  - name: Refund
+    schema: Order.items.properties.refunds.items
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    key: product_id
+    fields: [product_id, quantity, refund_amount, refund_cost, refund_made_at, variant_id]
+    embedded_in: Order
+  - name: ShippingAddress
+    schema: Order.items.properties.customer_shipping_address
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    embedded_in: Order
+  - name: OrderAlias
+    schema: Order.items.properties.alternate_order_ids.items
+    spec: openapi/northbeam-orders-v2-openapi.yml
+    fields: [type, id]
+    operations:
+      - POST /v2/orders/aliases (addOrderAliases)
+    note: additive only; aliases that already exist are silently ignored
+  - name: Customer
+    key: customer_id
+    materialized: false
+    note: >
+      There is no Customer resource, endpoint or schema. The customer exists only as
+      customer_id plus optional identity fields carried on each Order. Identity resolution
+      (and therefore new-vs-returning customer classification) happens inside Northbeam.
+  - name: SpendEntry
+    schema: SpendUpsertInput
+    spec: openapi/northbeam-spend-v1-openapi.yml
+    key: date + platform_name + campaign_id + adset_id + ad_id
+    granularity: daily
+    fields: [date, platform_account_id, platform_name, campaign_id, campaign_name, adset_id, adset_name, ad_id, ad_name, spend, currency]
+    operations:
+      - GET /v1/spend
+      - POST /v1/spend (upsert)
+      - DELETE /v1/spend
+  - name: HourlySpendEntry
+    schema: SpendHourlyUpsertInput
+    spec: openapi/northbeam-spend-v1-openapi.yml
+    key: hour_start_iso + platform_name + campaign_id + adset_id + ad_id
+    granularity: hourly (UTC)
+    operations:
+      - GET /v1/spend_hourly
+      - POST /v1/spend_hourly (upsert)
+      - DELETE /v1/spend_hourly
+  - name: DataExport
+    schema: CreateDataExport / Export_Request_Base
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    key: export_id
+    fields: [level, time_granularity, period_type, period_options, attribution_option, breakdowns, metrics, options]
+    sinks: [Export_To_Northbeam_Documents, Export_To_GCS_Bucket, Export_To_S3_Bucket]
+    operations:
+      - POST /v1/exports/data-export
+      - GET /v1/exports/data-export/result/{export_id}
+  - name: Breakdown
+    schema: Breakdowns
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    operations: [GET /v1/exports/breakdowns]
+    role: reference vocabulary — the legal values for DataExport.breakdowns
+  - name: AttributionModel
+    schema: AttributionModels
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    operations: [GET /v1/exports/attribution-models]
+    role: reference vocabulary — the legal values for DataExport.attribution_option
+  - name: Metric
+    schema: Metrics
+    spec: openapi/northbeam-data-export-v1-openapi.yml
+    operations: [GET /v1/exports/metrics]
+    role: reference vocabulary — the legal values for DataExport.metrics
+
+relationships:
+  - from: Order
+    to: Product
+    type: has_many
+    via: products[]
+    binding: embedded
+  - from: Order
+    to: Refund
+    type: has_many
+    via: refunds[]
+    binding: embedded
+  - from: Order
+    to: ShippingAddress
+    type: has_one
+    via: customer_shipping_address
+    binding: embedded
+  - from: Order
+    to: OrderAlias
+    type: has_many
+    via: alternate_order_ids[]
+    binding: embedded
+  - from: Refund
+    to: Product
+    type: belongs_to
+    via: refunds[].product_id -> products[].id
+    binding: id-reference
+  - from: Order
+    to: Customer
+    type: belongs_to
+    via: customer_id
+    binding: id-reference
+    note: target entity is not exposed by any endpoint
+  - from: HourlySpendEntry
+    to: SpendEntry
+    type: refines
+    via: same platform/campaign/adset/ad key at hourly granularity
+    binding: natural-key
+  - from: DataExport
+    to: Breakdown
+    type: has_many
+    via: breakdowns[] values enumerated by GET /breakdowns
+    binding: vocabulary-reference
+  - from: DataExport
+    to: Metric
+    type: has_many
+    via: metrics[] values enumerated by GET /metrics
+    binding: vocabulary-reference
+  - from: DataExport
+    to: AttributionModel
+    type: has_one
+    via: attribution_option enumerated by GET /attribution-models
+    binding: vocabulary-reference
+  - from: SpendEntry
+    to: Order
+    type: attributed_to
+    via: >
+      NOT an API-level relationship. Northbeam joins spend to revenue using
+      platform_name + campaign_id + adset_id + ad_id, which must match the customer's ad
+      object tagging and the UTM parameters on the click. Documented at
+      https://docs.northbeam.io/docs/spend-api-best-practices-and-limits.md
+    binding: out-of-band
+
+cross_document_refs: 0
+cross_document_note: >
+  The four OpenAPI documents share no components and no $ref crosses a document boundary —
+  each API was specified independently. Order and SpendEntry never appear in the same
+  document even though they are the two halves of the product.

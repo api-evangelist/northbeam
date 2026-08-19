@@ -1,0 +1,103 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.northbeam.io/docs/using-the-api.md
+docs:
+  - https://docs.northbeam.io/docs/using-the-api.md
+  - https://docs.northbeam.io/reference/post_orders
+  - https://docs.northbeam.io/changelog
+derived_from:
+  - openapi/_original/northbeam-orders-v1-openapi.json
+  - openapi/_original/northbeam-orders-v2-openapi.json
+
+versioning:
+  scheme: uri-path
+  current:
+    - api: Orders
+      version: v2
+      base: https://api.northbeam.io/v2
+      spec: openapi/northbeam-orders-v2-openapi.yml
+      spec_version: 1.1.0
+    - api: Spend
+      version: v1
+      base: https://api.northbeam.io/v1
+      spec: openapi/northbeam-spend-v1-openapi.yml
+      spec_version: 1.0.0
+    - api: Data Export
+      version: v1
+      base: https://api.northbeam.io/v1/exports
+      spec: openapi/northbeam-data-export-v1-openapi.yml
+      spec_version: '1'
+  docs_versions:
+    - v2.2
+    - v2.1.0
+  docs: https://docs.northbeam.io/docs/using-the-api.md
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_apis:
+    - api: Orders v1
+      base: https://api.northbeam.io/v1
+      evidence: >
+        The OpenAPI document Northbeam publishes for this surface is titled
+        "API - Orders - V1 (Deprecated)" (info.title), version 1.0.1. The endpoints are
+        still served and still documented at
+        https://docs.northbeam.io/reference/post_orders and
+        https://docs.northbeam.io/reference/get_orders.
+      spec: openapi/northbeam-orders-v1-openapi.yml
+      successor: Orders v2 (https://api.northbeam.io/v2)
+      sunset_date: not published
+  deprecated_operations: []
+  note: >
+    Deprecation is signalled ONLY in the title of one OpenAPI document. No operation in any
+    spec carries `deprecated: true`, no Sunset or Deprecation response header is documented
+    (RFC 8594), no removal date is published, and there is no versioning/deprecation policy
+    page. An integrator on Orders v1 has no machine-readable warning and no stated timeline.
+    A `Deprecation` pointer is therefore NOT emitted in apis.yml: the fact of one deprecated
+    version is recorded here, but Northbeam publishes no deprecation POLICY to point at.
+
+sla:
+  url: null
+  uptime_target: not published
+  note: >
+    No public SLA or uptime commitment was found. Support tiers differ by plan (email support
+    on Starter; dedicated Media Strategist on Professional; dedicated CSM and a shared Slack
+    channel on Enterprise) but no availability number is published.
+
+status_page:
+  url: null
+  present: false
+  probes:
+    - url: https://status.northbeam.io/
+      status: 000
+      note: DNS does not resolve
+    - url: https://northbeam.statuspage.io
+      status: 302
+      note: >
+        redirects to https://www.statuspage.io (the Atlassian product marketing site) — this
+        is Statuspage's catch-all for an unregistered subdomain, NOT a Northbeam status page.
+        The /api/v2/summary.json and /api/v2/status.json paths return the same Atlassian
+        marketing HTML, not Statuspage JSON.
+  note: >
+    Northbeam publishes no status page. This is a real operational-transparency gap for a
+    platform whose customers run daily media decisions off it. No StatusPage pointer is
+    emitted in apis.yml.
+
+changelog:
+  url: https://docs.northbeam.io/changelog
+  present: false
+  entries: 0
+  note: >
+    The ReadMe changelog surface exists at https://docs.northbeam.io/changelog and renders
+    "No Changelogs" — the page is published but empty. Individual doc pages do carry an
+    `updatedAt` timestamp in their markdown frontmatter (e.g. the Orders API limits page was
+    updated 2026-08-11), which is the only dated change signal available. No ChangeLog
+    artifact or pointer is emitted, because there are no dated entries to record.
+
+support:
+  ticket: https://www.northbeam.io/submit-a-support-ticket
+  contact: https://www.northbeam.io/contact-us
+  email: success@northbeam.io
+  knowledge_base: https://docs.northbeam.io

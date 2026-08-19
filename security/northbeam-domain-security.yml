@@ -1,4 +1,4 @@
-generated: '2026-07-11'
+generated: '2026-08-13'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
@@ -11,7 +11,7 @@ hosts:
 - host: docs.northbeam.io
   https: true
   tls_version: TLSv1.3
-  cert_expires: Sep  1 17:43:11 2026 GMT
+  cert_expires: Oct 31 01:13:38 2026 GMT
   hsts: true
   hsts_max_age: 31536000
 - host: api.northbeam.io
@@ -19,6 +19,30 @@ hosts:
   tls_version: TLSv1.3
   cert_expires: Sep 25 11:33:49 2026 GMT
   hsts: null
+- host: mcp.northbeam.io
+  https: true
+  cert_expires: Nov  5 17:34:40 2026 GMT
+  hsts: null
+  note: agent surface; returns 401 with a WWW-Authenticate Bearer challenge on every path
+  added_by: enrichment pass 2026-08-13 (host is not in the OpenAPI servers[] the script reads)
+- host: auth.northbeam.io
+  https: true
+  cert_expires: Sep 27 05:25:07 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  note: Auth0 identity tenant backing the MCP OAuth flow
+  added_by: enrichment pass 2026-08-13 (host is not in the OpenAPI servers[] the script reads)
+- host: api-uat.northbeam.io
+  https: true
+  cert_expires: Oct 29 21:18:18 2026 GMT
+  hsts: null
+  note: UAT sandbox host declared in the Orders and Spend servers[] blocks
+  added_by: enrichment pass 2026-08-13
+x-hsts-gap: >
+  HSTS is served on www.northbeam.io, docs.northbeam.io and auth.northbeam.io but NOT on
+  api.northbeam.io, api-uat.northbeam.io or mcp.northbeam.io — the three hosts that actually
+  carry API credentials.
 domains:
 - domain: northbeam.io
   dnssec: true
