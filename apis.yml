@@ -51,6 +51,10 @@ apis:
     humanURL: https://docs.northbeam.io/docs/orders-api
     baseURL: https://api.northbeam.io/v2/orders
     tags:
+      - Order
+      - Attribution
+      - E-Commerce
+    tags_raw:
       - Orders
       - Attribution
       - E-Commerce
