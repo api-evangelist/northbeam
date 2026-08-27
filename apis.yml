@@ -41,111 +41,212 @@ tags:
   - Marketing Analytics
   - Agents
 apis:
-  - aid: northbeam:orders-api
-    name: Northbeam Orders API
-    description: >-
-      REST API for submitting order and purchase data to Northbeam as the revenue ground truth
-      for multi-touch attribution and media mix modeling. Writes are natural-key upserts on a
-      caller-supplied order_id, batched up to 1,000 orders per request, with a partial-update
-      PATCH and an additive alias endpoint on v2.
-    humanURL: https://docs.northbeam.io/docs/orders-api
-    baseURL: https://api.northbeam.io/v2/orders
-    tags:
-      - Order
-      - Attribution
-      - E-Commerce
-    tags_raw:
-      - Orders
-      - Attribution
-      - E-Commerce
-    properties:
-      - type: Documentation
-        url: https://docs.northbeam.io/docs/orders-api
-      - type: APIReference
-        url: https://docs.northbeam.io/reference/post_orders-1
-      - type: OpenAPI
-        url: openapi/northbeam-orders-v2-openapi.yml
-      - type: OpenAPI
-        url: openapi/northbeam-orders-v1-openapi.yml
-      - type: Overlay
-        url: overlays/northbeam-orders-v2-overlay.yaml
-      - type: Overlay
-        url: overlays/northbeam-orders-v1-overlay.yaml
-      - type: AgentSkill
-        url: skills/northbeam-sync-orders.md
-  - aid: northbeam:spend-api
-    name: Northbeam Spend API
-    description: >-
-      REST API for uploading daily and hourly spend records from ad platforms Northbeam does
-      not integrate with natively, so those channels can be attributed. Rows are upserted on
-      the platform/campaign/adset/ad natural key, which must match the customer's UTM tagging.
-    humanURL: https://docs.northbeam.io/docs/spend-api
-    baseURL: https://api.northbeam.io/v1
-    tags:
-      - Spend
-      - Ad Platforms
-      - Attribution
-    properties:
-      - type: Documentation
-        url: https://docs.northbeam.io/docs/spend-api
-      - type: APIReference
-        url: https://docs.northbeam.io/reference/post_spend-hourly
-      - type: OpenAPI
-        url: openapi/northbeam-spend-v1-openapi.yml
-      - type: Overlay
-        url: overlays/northbeam-spend-v1-overlay.yaml
-      - type: AgentSkill
-        url: skills/northbeam-sync-ad-spend.md
-  - aid: northbeam:data-export-api
-    name: Northbeam Data Export API
-    description: >-
-      Asynchronous REST API for exporting attribution performance metrics including revenue,
-      transactions, CAC, AOV and creative analytics across attribution windows and models.
-      Submit an export config, poll for the result, or deliver straight to a GCS or S3 bucket.
-    humanURL: https://docs.northbeam.io/docs/northbeam-api-data-export-1
-    baseURL: https://api.northbeam.io/v1/exports
-    tags:
-      - Data Export
-      - Attribution
-      - Performance Metrics
-      - ROAS
-    properties:
-      - type: Documentation
-        url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
-      - type: APIReference
-        url: https://docs.northbeam.io/reference/post_data-export-1
-      - type: OpenAPI
-        url: openapi/northbeam-data-export-v1-openapi.yml
-      - type: Overlay
-        url: overlays/northbeam-data-export-v1-overlay.yaml
-      - type: RateLimits
-        url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
-      - type: AgentSkill
-        url: skills/northbeam-export-attribution-data.md
-  - aid: northbeam:mcp
-    name: Northbeam MCP Server
-    description: >-
-      First-party remote Model Context Protocol server giving an agent read-only access to the
-      caller's Northbeam dashboards — performance, attribution, spend and orders. Documented as
-      a custom connector for Claude (web, Desktop, Code) and ChatGPT. Secured with OAuth 2.1
-      (PKCE, dynamic client registration, scope access:mcp) against an Auth0 tenant; the
-      tools/list method is bearer-gated. Available to Pro and Enterprise customers.
-    humanURL: https://docs.northbeam.io/docs/connect-northbeam-to-claude
-    baseURL: https://mcp.northbeam.io
-    tags:
-      - MCP
-      - Agents
-      - Attribution
-    properties:
-      - type: MCPServer
-        url: mcp/northbeam-mcp.yml
-      - type: ToolCrosswalk
-        url: mcp/northbeam-tool-crosswalk.yml
-      - type: Documentation
-        url: https://docs.northbeam.io/docs/connect-northbeam-to-claude
-      - type: OAuthScopes
-        url: well-known/northbeam-oauth-authorization-server.json
+- aid: northbeam:mcp
+  name: Northbeam MCP Server
+  description: >-
+    First-party remote Model Context Protocol server giving an agent read-only access to the caller's
+    Northbeam dashboards — performance, attribution, spend and orders. Documented as a custom connector
+    for Claude (web, Desktop, Code) and ChatGPT. Secured with OAuth 2.1 (PKCE, dynamic client registration,
+    scope access:mcp) against an Auth0 tenant; the tools/list method is bearer-gated. Available to Pro
+    and Enterprise customers.
+  humanURL: https://docs.northbeam.io/docs/connect-northbeam-to-claude
+  baseURL: https://mcp.northbeam.io
+  tags:
+  - MCP
+  - Agents
+  - Attribution
+  properties:
+  - type: MCPServer
+    url: mcp/northbeam-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/northbeam-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/connect-northbeam-to-claude
+  - type: OAuthScopes
+    url: well-known/northbeam-oauth-authorization-server.json
+- aid: northbeam:northbeam-attribution-models-api
+  name: Northbeam Attribution Models API
+  description: The Attribution Models API from Northbeam — 1 operation(s) for attribution models.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Attribution Models
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-attribution-models-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-breakdowns-api
+  name: Northbeam Breakdowns API
+  description: The Breakdowns API from Northbeam — 1 operation(s) for breakdowns.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Breakdowns
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-breakdowns-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-data-export-api
+  name: Northbeam Data Export API
+  description: The Data Export API from Northbeam — 2 operation(s) for data export.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Data Export
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-data-export-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-metrics-api
+  name: Northbeam Metrics API
+  description: The Metrics API from Northbeam — 1 operation(s) for metrics.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-orders-api
+  name: Northbeam Orders API
+  description: The Orders API from Northbeam — 2 operation(s) for orders.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-spend-api
+  name: Northbeam Spend API
+  description: The Spend API from Northbeam — 1 operation(s) for spend.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Spend
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-spend-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
+- aid: northbeam:northbeam-spend-hourly-api
+  name: Northbeam Spend Hourly API
+  description: The Spend Hourly API from Northbeam — 1 operation(s) for spend hourly.
+  humanURL: https://docs.northbeam.io/docs/orders-api
+  baseURL: https://api.northbeam.io/v2/orders
+  tags:
+  - Spend Hourly
+  properties:
+  - type: OpenAPI
+    url: openapi/northbeam-spend-hourly-api-openapi.yml
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/orders-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_orders-1
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/spend-api
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_spend-hourly
+  - type: Documentation
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-1
+  - type: APIReference
+    url: https://docs.northbeam.io/reference/post_data-export-1
+  - type: RateLimits
+    url: https://docs.northbeam.io/docs/northbeam-api-data-export-rate-limits-1
 common:
+  - type: Overlay
+    url: overlays/northbeam-orders-v2-overlay.yaml
+  - type: Overlay
+    url: overlays/northbeam-orders-v1-overlay.yaml
+  - type: AgentSkill
+    url: skills/northbeam-sync-orders.md
+  - type: Overlay
+    url: overlays/northbeam-spend-v1-overlay.yaml
+  - type: AgentSkill
+    url: skills/northbeam-sync-ad-spend.md
+  - type: Overlay
+    url: overlays/northbeam-data-export-v1-overlay.yaml
+  - type: AgentSkill
+    url: skills/northbeam-export-attribution-data.md
   - type: Website
     url: https://www.northbeam.io
   - type: DeveloperPortal
