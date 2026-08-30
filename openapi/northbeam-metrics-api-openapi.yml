@@ -1,0 +1,57 @@
+openapi: 3.2.0
+info:
+  title: DATA EXPORT - V1 Metrics API
+  version: '1'
+  description: API for exporting data from Northbeam
+  termsOfService: https://www.northbeam.io/terms
+servers:
+- url: https://api.northbeam.io/v1/exports
+security:
+- api_key: []
+  client_id: []
+tags:
+- name: Metrics
+paths:
+  /metrics:
+    get:
+      summary: Fetch all available metrics
+      responses:
+        '200':
+          description: Metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics'
+        '401':
+          description: Unauthorized
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+      tags:
+      - Metrics
+components:
+  schemas:
+    Metrics:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              label:
+                type:
+                - string
+                - 'null'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header
+    client_id:
+      type: apiKey
+      name: Data-Client-ID
+      in: header
