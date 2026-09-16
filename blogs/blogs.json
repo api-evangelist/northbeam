@@ -3,10 +3,7 @@
   "feeds": [
     {
       "source": "https://docs.northbeam.io/docs/frequently-asked-questions",
-      "feed_url": "https://docs.northbeam.io/docs/frequently-asked-questions",
-      "title": "",
-      "saved": 0,
-      "method": "none"
+      "error": "HTTPError"
     },
     {
       "source": "https://www.linkedin.com/company/northbeam",
@@ -16,7 +13,7 @@
       "method": "none"
     }
   ],
-  "fetched": "2026-09-06T19:17:18Z",
+  "fetched": "2026-09-13T13:00:00Z",
   "post_count": 0,
   "agent_pulled": "2026-07-04"
 }
