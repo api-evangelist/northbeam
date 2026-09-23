@@ -30,6 +30,8 @@ paths:
           description: Internal server error
       tags:
       - Attribution Models
+      operationId: getAttributionModels
+      x-operation-id-source: derived
 components:
   schemas:
     AttributionModels:

@@ -161,6 +161,8 @@ paths:
       deprecated: false
       tags:
       - Spend Hourly
+      operationId: getSpendHourly
+      x-operation-id-source: derived
     post:
       summary: Upsert one or multiple hourly spend records
       requestBody:
@@ -203,6 +205,8 @@ paths:
       deprecated: false
       tags:
       - Spend Hourly
+      operationId: postSpendHourly
+      x-operation-id-source: derived
     delete:
       summary: Delete a spend record
       requestBody:
@@ -245,6 +249,8 @@ paths:
       deprecated: false
       tags:
       - Spend Hourly
+      operationId: deleteSpendHourly
+      x-operation-id-source: derived
 components:
   schemas:
     SpendHourlyDeleteInputPayload:
@@ -255,6 +261,147 @@ components:
       required:
       - data
       title: Deletion Parameters Object
+    ErrorLoc:
+      properties:
+        loc:
+          type: string
+          title: Loc
+        msg:
+          type: string
+          title: Msg
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ErrorLoc
+    SpendHourlyDefaultOutput:
+      properties:
+        hour_start_iso:
+          type: string
+          format: date-time
+          title: Hour Start Iso
+          description: The date-time of spend entry to upsert in UTC, required
+          examples:
+          - 1970-01-01T00:00:00-0000
+        platform_account_id:
+          type: string
+          title: Platform Account Id
+          description: The Ad Platform Account ID to upsert, used for segregating ad objects per ad platform account
+          default: ''
+          examples:
+          - '12345'
+        platform_name:
+          type: string
+          title: Platform Name
+          description: The Ad Platform Name to upsert, required
+          examples:
+          - Facebook
+        campaign_id:
+          type: string
+          title: Campaign Id
+          description: The Ad Platform's Campaign ID (utm_campaign, if known) to upsert, required
+          examples:
+          - '12345'
+        campaign_name:
+          type: string
+          title: Campaign Name
+          description: The Ad Platform Campaign Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `campaign_id`
+          examples:
+          - Banana Festival Awareness Campaign
+        adset_id:
+          type: string
+          title: Adset Id
+          description: The Ad Platform's Adset ID (utm_term, if known) to upsert, defaults to '' if empty (not all platforms support adsets)
+          default: ''
+          examples:
+          - '12345'
+        adset_name:
+          type: string
+          title: Adset Name
+          description: The Ad Platform Adset Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
+          default: ''
+          examples:
+          - Banana Adset
+        ad_id:
+          type: string
+          title: Ad Id
+          description: The Ad Platform's Ad ID (utm_content, if known) to upsert, defaults to '' if empty (not all platforms support ads)
+          default: ''
+          examples:
+          - '12345'
+        ad_name:
+          type: string
+          title: Ad Name
+          description: The Ad Platform Ad Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
+          default: ''
+          examples:
+          - Banana Ad
+        spend:
+          type: number
+          minimum: 0
+          title: Spend
+          description: Amount (in currency) spent on ad object to upsert, defaults to 0 if empty
+          examples:
+          - 123.5
+        spend_currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          title: Spend Currency
+          description: The Currency of the Spend per ISO 4217 to upsert, required
+          examples:
+          - USD
+          - CAD
+        impressions:
+          type: number
+          minimum: 0
+          title: Impressions
+          description: The amount of impressions the ad object received on a given date, defaults to 0 if empty
+          default: 0
+          examples:
+          - 299
+        clicks:
+          type: number
+          minimum: 0
+          title: Clicks
+          description: The amount of clicks the ad object received on a given date, defaults to 0 if empty
+          default: 0
+          examples:
+          - 0
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - hour_start_iso
+      - platform_name
+      - campaign_id
+      - campaign_name
+      - spend
+      - spend_currency
+      - created_at
+      - updated_at
+      title: Spend Entry Return
+    SpendHourlyUpsertInputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendHourlyUpsertInput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries
     SpendHourlyDefaultOutputPayload:
       properties:
         data:
@@ -396,56 +543,6 @@ components:
       - total_pages
       - total_count
       title: Spend Entries Return Metadata
-    SpendHourlyUpsertInputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendHourlyUpsertInput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries
-    ErrorLoc:
-      properties:
-        loc:
-          type: string
-          title: Loc
-        msg:
-          type: string
-          title: Msg
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ErrorLoc
-    RequestError:
-      properties:
-        errors:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ErrorLoc'
-            type: array
-          - type: 'null'
-          title: Errors
-        message:
-          type: string
-          title: Message
-        request_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - message
-      title: RequestError
     SpendHourlyDeleteInput:
       properties:
         hour_start_iso:
@@ -487,119 +584,28 @@ components:
       - hour_start_iso
       - campaign_id
       title: Spend Hourly Deletion Parameters
-    SpendHourlyDefaultOutput:
+    RequestError:
       properties:
-        hour_start_iso:
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ErrorLoc'
+            type: array
+          - type: 'null'
+          title: Errors
+        message:
           type: string
-          format: date-time
-          title: Hour Start Iso
-          description: The date-time of spend entry to upsert in UTC, required
-          examples:
-          - 1970-01-01T00:00:00-0000
-        platform_account_id:
-          type: string
-          title: Platform Account Id
-          description: The Ad Platform Account ID to upsert, used for segregating ad objects per ad platform account
-          default: ''
-          examples:
-          - '12345'
-        platform_name:
-          type: string
-          title: Platform Name
-          description: The Ad Platform Name to upsert, required
-          examples:
-          - Facebook
-        campaign_id:
-          type: string
-          title: Campaign Id
-          description: The Ad Platform's Campaign ID (utm_campaign, if known) to upsert, required
-          examples:
-          - '12345'
-        campaign_name:
-          type: string
-          title: Campaign Name
-          description: The Ad Platform Campaign Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `campaign_id`
-          examples:
-          - Banana Festival Awareness Campaign
-        adset_id:
-          type: string
-          title: Adset Id
-          description: The Ad Platform's Adset ID (utm_term, if known) to upsert, defaults to '' if empty (not all platforms support adsets)
-          default: ''
-          examples:
-          - '12345'
-        adset_name:
-          type: string
-          title: Adset Name
-          description: The Ad Platform Adset Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
-          default: ''
-          examples:
-          - Banana Adset
-        ad_id:
-          type: string
-          title: Ad Id
-          description: The Ad Platform's Ad ID (utm_content, if known) to upsert, defaults to '' if empty (not all platforms support ads)
-          default: ''
-          examples:
-          - '12345'
-        ad_name:
-          type: string
-          title: Ad Name
-          description: The Ad Platform Ad Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
-          default: ''
-          examples:
-          - Banana Ad
-        spend:
-          type: number
-          minimum: 0
-          title: Spend
-          description: Amount (in currency) spent on ad object to upsert, defaults to 0 if empty
-          examples:
-          - 123.5
-        spend_currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          title: Spend Currency
-          description: The Currency of the Spend per ISO 4217 to upsert, required
-          examples:
-          - USD
-          - CAD
-        impressions:
-          type: number
-          minimum: 0
-          title: Impressions
-          description: The amount of impressions the ad object received on a given date, defaults to 0 if empty
-          default: 0
-          examples:
-          - 299
-        clicks:
-          type: number
-          minimum: 0
-          title: Clicks
-          description: The amount of clicks the ad object received on a given date, defaults to 0 if empty
-          default: 0
-          examples:
-          - 0
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
+          title: Message
+        request_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Request Id
       type: object
       required:
-      - hour_start_iso
-      - platform_name
-      - campaign_id
-      - campaign_name
-      - spend
-      - spend_currency
-      - created_at
-      - updated_at
-      title: Spend Entry Return
+      - message
+      title: RequestError
   securitySchemes:
     api_key:
       type: apiKey

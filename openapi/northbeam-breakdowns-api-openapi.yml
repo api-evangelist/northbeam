@@ -30,6 +30,8 @@ paths:
           description: Internal server error
       tags:
       - Breakdowns
+      operationId: getBreakdowns
+      x-operation-id-source: derived
 components:
   schemas:
     Breakdowns:
