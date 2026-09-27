@@ -73,34 +73,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    DataExportResult:
-      type: object
-      properties:
-        data_export_id:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-          - PENDING
-          - SUCCESS
-          - ERROR
-        result:
-          type: array
-          items:
+    Export_To_GCS_Bucket:
+      allOf:
+      - type: object
+        required:
+        - bucket_name
+        properties:
+          bucket_name:
+            description: Name of the external bucket where to export your file.
             type: string
-            format: uri
-        created_at:
-          type: string
-          format: date-time
-        finished_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        warn:
-          description: Warning info regarding deprecated params, actions expected, etc.
-          type: object
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
+            type: string
+            minLength: 3
+            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
+      - $ref: '#/components/schemas/Export_Request_Base'
     Export_To_Northbeam_Documents:
       allOf:
       - type: object
@@ -135,6 +122,34 @@ components:
             minLength: 3
             pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
       - $ref: '#/components/schemas/Export_Request_Base'
+    DataExportResult:
+      type: object
+      properties:
+        data_export_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - PENDING
+          - SUCCESS
+          - ERROR
+        result:
+          type: array
+          items:
+            type: string
+            format: uri
+        created_at:
+          type: string
+          format: date-time
+        finished_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        warn:
+          description: Warning info regarding deprecated params, actions expected, etc.
+          type: object
     Export_Request_Base:
       type: object
       properties:
@@ -293,21 +308,6 @@ components:
       required:
       - attribution_options
       - metrics
-    Export_To_GCS_Bucket:
-      allOf:
-      - type: object
-        required:
-        - bucket_name
-        properties:
-          bucket_name:
-            description: Name of the external bucket where to export your file.
-            type: string
-          export_file_name:
-            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
-            type: string
-            minLength: 3
-            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
-      - $ref: '#/components/schemas/Export_Request_Base'
   securitySchemes:
     api_key:
       type: apiKey

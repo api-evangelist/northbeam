@@ -267,53 +267,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SpendDefaultOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendDefaultOutput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries Return
-    ErrorLoc:
-      properties:
-        loc:
-          type: string
-          title: Loc
-        msg:
-          type: string
-          title: Msg
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ErrorLoc
-    SpendDeleteInputPayload:
-      properties:
-        data:
-          $ref: '#/components/schemas/SpendDeleteInput'
-      type: object
-      required:
-      - data
-      title: Deletion Parameters Object
-    SpendUpsertInputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendUpsertInput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries
     SpendDefaultOutput:
       properties:
         date:
@@ -530,6 +483,45 @@ components:
       - spend
       - spend_currency
       title: Spend Entry
+    RequestError:
+      properties:
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ErrorLoc'
+            type: array
+          - type: 'null'
+          title: Errors
+        message:
+          type: string
+          title: Message
+        request_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Request Id
+      type: object
+      required:
+      - message
+      title: RequestError
+    ErrorLoc:
+      properties:
+        loc:
+          type: string
+          title: Loc
+        msg:
+          type: string
+          title: Msg
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ErrorLoc
     SpendListOutputPayload:
       properties:
         data:
@@ -557,6 +549,36 @@ components:
       - total_pages
       - total_count
       title: Spend Entries Return Metadata
+    SpendDeleteInputPayload:
+      properties:
+        data:
+          $ref: '#/components/schemas/SpendDeleteInput'
+      type: object
+      required:
+      - data
+      title: Deletion Parameters Object
+    SpendUpsertInputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendUpsertInput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries
+    SpendDefaultOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendDefaultOutput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries Return
     SpendDeleteInput:
       properties:
         date:
@@ -598,28 +620,6 @@ components:
       - date
       - campaign_id
       title: Deletion Parameters
-    RequestError:
-      properties:
-        errors:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ErrorLoc'
-            type: array
-          - type: 'null'
-          title: Errors
-        message:
-          type: string
-          title: Message
-        request_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - message
-      title: RequestError
   securitySchemes:
     api_key:
       type: apiKey
