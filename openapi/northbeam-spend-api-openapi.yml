@@ -267,6 +267,183 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ErrorLoc:
+      properties:
+        loc:
+          type: string
+          title: Loc
+        msg:
+          type: string
+          title: Msg
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ErrorLoc
+    SpendListOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendDefaultOutput'
+          type: array
+          title: Data
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_count:
+          type: integer
+          title: Total Count
+      type: object
+      required:
+      - data
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: Spend Entries Return Metadata
+    RequestError:
+      properties:
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ErrorLoc'
+            type: array
+          - type: 'null'
+          title: Errors
+        message:
+          type: string
+          title: Message
+        request_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Request Id
+      type: object
+      required:
+      - message
+      title: RequestError
+    SpendUpsertInput:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+          description: The date of spend entry to upsert, required
+          examples:
+          - '1970-01-01'
+        platform_account_id:
+          type: string
+          title: Platform Account Id
+          description: The Ad Platform Account ID to upsert, used for segregating ad objects per ad platform account
+          default: ''
+          examples:
+          - '12345'
+        platform_name:
+          type: string
+          title: Platform Name
+          description: The Ad Platform Name to upsert, required
+          examples:
+          - Facebook
+        campaign_id:
+          type: string
+          title: Campaign Id
+          description: The Ad Platform's Campaign ID (utm_campaign, if known) to upsert, required
+          examples:
+          - '12345'
+        campaign_name:
+          type: string
+          title: Campaign Name
+          description: The Ad Platform Campaign Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `campaign_id`
+          examples:
+          - Banana Festival Awareness Campaign
+        adset_id:
+          type: string
+          title: Adset Id
+          description: The Ad Platform's Adset ID (utm_term, if known) to upsert, defaults to '' if empty (not all platforms support adsets)
+          default: ''
+          examples:
+          - '12345'
+        adset_name:
+          type: string
+          title: Adset Name
+          description: The Ad Platform Adset Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
+          default: ''
+          examples:
+          - Banana Adset
+        ad_id:
+          type: string
+          title: Ad Id
+          description: The Ad Platform's Ad ID (utm_content, if known) to upsert, defaults to '' if empty (not all platforms support ads)
+          default: ''
+          examples:
+          - '12345'
+        ad_name:
+          type: string
+          title: Ad Name
+          description: The Ad Platform Ad Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
+          default: ''
+          examples:
+          - Banana Ad
+        spend:
+          type: number
+          minimum: 0
+          title: Spend
+          description: Amount (in currency) spent on ad object to upsert, defaults to 0 if empty
+          examples:
+          - '123'
+        spend_currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          title: Spend Currency
+          description: The Currency of the Spend per ISO 4217 to upsert, required
+          examples:
+          - USD
+          - CAD
+        impressions:
+          type: number
+          minimum: 0
+          title: Impressions
+          description: The amount of impressions the ad object received on a given date, defaults to 0 if empty
+          default: 0
+          examples:
+          - 299
+        clicks:
+          type: number
+          minimum: 0
+          title: Clicks
+          description: The amount of clicks the ad object received on a given date, defaults to 0 if empty
+          default: 0
+          examples:
+          - 0
+      type: object
+      required:
+      - date
+      - platform_name
+      - campaign_id
+      - campaign_name
+      - spend
+      - spend_currency
+      title: Spend Entry
+    SpendDeleteInputPayload:
+      properties:
+        data:
+          $ref: '#/components/schemas/SpendDeleteInput'
+      type: object
+      required:
+      - data
+      title: Deletion Parameters Object
     SpendDefaultOutput:
       properties:
         date:
@@ -380,205 +557,6 @@ components:
       - created_at
       - updated_at
       title: Spend Entry Return
-    SpendUpsertInput:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-          description: The date of spend entry to upsert, required
-          examples:
-          - '1970-01-01'
-        platform_account_id:
-          type: string
-          title: Platform Account Id
-          description: The Ad Platform Account ID to upsert, used for segregating ad objects per ad platform account
-          default: ''
-          examples:
-          - '12345'
-        platform_name:
-          type: string
-          title: Platform Name
-          description: The Ad Platform Name to upsert, required
-          examples:
-          - Facebook
-        campaign_id:
-          type: string
-          title: Campaign Id
-          description: The Ad Platform's Campaign ID (utm_campaign, if known) to upsert, required
-          examples:
-          - '12345'
-        campaign_name:
-          type: string
-          title: Campaign Name
-          description: The Ad Platform Campaign Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `campaign_id`
-          examples:
-          - Banana Festival Awareness Campaign
-        adset_id:
-          type: string
-          title: Adset Id
-          description: The Ad Platform's Adset ID (utm_term, if known) to upsert, defaults to '' if empty (not all platforms support adsets)
-          default: ''
-          examples:
-          - '12345'
-        adset_name:
-          type: string
-          title: Adset Name
-          description: The Ad Platform Adset Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
-          default: ''
-          examples:
-          - Banana Adset
-        ad_id:
-          type: string
-          title: Ad Id
-          description: The Ad Platform's Ad ID (utm_content, if known) to upsert, defaults to '' if empty (not all platforms support ads)
-          default: ''
-          examples:
-          - '12345'
-        ad_name:
-          type: string
-          title: Ad Name
-          description: The Ad Platform Ad Name to upsert - will be as Ad Name in the Northbeam Dashboard - can be the same as `adset_id` - defaults to '' if empty
-          default: ''
-          examples:
-          - Banana Ad
-        spend:
-          type: number
-          minimum: 0
-          title: Spend
-          description: Amount (in currency) spent on ad object to upsert, defaults to 0 if empty
-          examples:
-          - '123'
-        spend_currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          title: Spend Currency
-          description: The Currency of the Spend per ISO 4217 to upsert, required
-          examples:
-          - USD
-          - CAD
-        impressions:
-          type: number
-          minimum: 0
-          title: Impressions
-          description: The amount of impressions the ad object received on a given date, defaults to 0 if empty
-          default: 0
-          examples:
-          - 299
-        clicks:
-          type: number
-          minimum: 0
-          title: Clicks
-          description: The amount of clicks the ad object received on a given date, defaults to 0 if empty
-          default: 0
-          examples:
-          - 0
-      type: object
-      required:
-      - date
-      - platform_name
-      - campaign_id
-      - campaign_name
-      - spend
-      - spend_currency
-      title: Spend Entry
-    RequestError:
-      properties:
-        errors:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ErrorLoc'
-            type: array
-          - type: 'null'
-          title: Errors
-        message:
-          type: string
-          title: Message
-        request_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - message
-      title: RequestError
-    ErrorLoc:
-      properties:
-        loc:
-          type: string
-          title: Loc
-        msg:
-          type: string
-          title: Msg
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ErrorLoc
-    SpendListOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendDefaultOutput'
-          type: array
-          title: Data
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_count:
-          type: integer
-          title: Total Count
-      type: object
-      required:
-      - data
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      title: Spend Entries Return Metadata
-    SpendDeleteInputPayload:
-      properties:
-        data:
-          $ref: '#/components/schemas/SpendDeleteInput'
-      type: object
-      required:
-      - data
-      title: Deletion Parameters Object
-    SpendUpsertInputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendUpsertInput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries
-    SpendDefaultOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendDefaultOutput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries Return
     SpendDeleteInput:
       properties:
         date:
@@ -620,6 +598,28 @@ components:
       - date
       - campaign_id
       title: Deletion Parameters
+    SpendUpsertInputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendUpsertInput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries
+    SpendDefaultOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendDefaultOutput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries Return
   securitySchemes:
     api_key:
       type: apiKey

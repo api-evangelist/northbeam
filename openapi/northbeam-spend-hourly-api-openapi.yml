@@ -253,17 +253,23 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SpendHourlyDefaultOutputPayload:
+    ErrorLoc:
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
-          type: array
-          title: Data
+        loc:
+          type: string
+          title: Loc
+        msg:
+          type: string
+          title: Msg
+        type:
+          type: string
+          title: Type
       type: object
       required:
-      - data
-      title: Spend Entries Return
+      - loc
+      - msg
+      - type
+      title: ErrorLoc
     SpendHourlyUpsertInputPayload:
       properties:
         data:
@@ -297,23 +303,6 @@ components:
       required:
       - message
       title: RequestError
-    ErrorLoc:
-      properties:
-        loc:
-          type: string
-          title: Loc
-        msg:
-          type: string
-          title: Msg
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ErrorLoc
     SpendHourlyDeleteInputPayload:
       properties:
         data:
@@ -322,6 +311,85 @@ components:
       required:
       - data
       title: Deletion Parameters Object
+    SpendHourlyListOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
+          type: array
+          title: Data
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_count:
+          type: integer
+          title: Total Count
+      type: object
+      required:
+      - data
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: Spend Entries Return Metadata
+    SpendHourlyDefaultOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries Return
+    SpendHourlyDeleteInput:
+      properties:
+        hour_start_iso:
+          type: string
+          format: date-time
+          title: Hour Start Iso
+          description: The date of spend entry to delete, required
+          examples:
+          - 1970-01-01T00:00:00-0000
+        platform_account_id:
+          type: string
+          title: Platform Account Id
+          description: The Ad Platform Account ID to delete, required
+          default: ''
+          examples:
+          - '12345'
+        campaign_id:
+          type: string
+          title: Campaign Id
+          description: The Ad Platform's Campaign ID to delete, required
+          examples:
+          - '12345'
+        adset_id:
+          type: string
+          title: Adset Id
+          description: The Ad Platform's Adset ID to delete, defaults to '' if empty
+          default: ''
+          examples:
+          - '12345'
+        ad_id:
+          type: string
+          title: Ad Id
+          description: The Ad Platform's Ad ID to delete, defaults to '' if empty
+          default: ''
+          examples:
+          - '12345'
+      type: object
+      required:
+      - hour_start_iso
+      - campaign_id
+      title: Spend Hourly Deletion Parameters
     SpendHourlyUpsertInput:
       properties:
         hour_start_iso:
@@ -425,47 +493,6 @@ components:
       - spend
       - spend_currency
       title: Spend Hourly Entry
-    SpendHourlyDeleteInput:
-      properties:
-        hour_start_iso:
-          type: string
-          format: date-time
-          title: Hour Start Iso
-          description: The date of spend entry to delete, required
-          examples:
-          - 1970-01-01T00:00:00-0000
-        platform_account_id:
-          type: string
-          title: Platform Account Id
-          description: The Ad Platform Account ID to delete, required
-          default: ''
-          examples:
-          - '12345'
-        campaign_id:
-          type: string
-          title: Campaign Id
-          description: The Ad Platform's Campaign ID to delete, required
-          examples:
-          - '12345'
-        adset_id:
-          type: string
-          title: Adset Id
-          description: The Ad Platform's Adset ID to delete, defaults to '' if empty
-          default: ''
-          examples:
-          - '12345'
-        ad_id:
-          type: string
-          title: Ad Id
-          description: The Ad Platform's Ad ID to delete, defaults to '' if empty
-          default: ''
-          examples:
-          - '12345'
-      type: object
-      required:
-      - hour_start_iso
-      - campaign_id
-      title: Spend Hourly Deletion Parameters
     SpendHourlyDefaultOutput:
       properties:
         hour_start_iso:
@@ -579,33 +606,6 @@ components:
       - created_at
       - updated_at
       title: Spend Entry Return
-    SpendHourlyListOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
-          type: array
-          title: Data
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_count:
-          type: integer
-          title: Total Count
-      type: object
-      required:
-      - data
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      title: Spend Entries Return Metadata
   securitySchemes:
     api_key:
       type: apiKey
