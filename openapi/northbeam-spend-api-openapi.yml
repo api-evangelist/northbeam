@@ -267,6 +267,58 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    RequestError:
+      properties:
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ErrorLoc'
+            type: array
+          - type: 'null'
+          title: Errors
+        message:
+          type: string
+          title: Message
+        request_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Request Id
+      type: object
+      required:
+      - message
+      title: RequestError
+    SpendUpsertInputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendUpsertInput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries
+    SpendDefaultOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendDefaultOutput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries Return
+    SpendDeleteInputPayload:
+      properties:
+        data:
+          $ref: '#/components/schemas/SpendDeleteInput'
+      type: object
+      required:
+      - data
+      title: Deletion Parameters Object
     ErrorLoc:
       properties:
         loc:
@@ -311,28 +363,6 @@ components:
       - total_pages
       - total_count
       title: Spend Entries Return Metadata
-    RequestError:
-      properties:
-        errors:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ErrorLoc'
-            type: array
-          - type: 'null'
-          title: Errors
-        message:
-          type: string
-          title: Message
-        request_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - message
-      title: RequestError
     SpendUpsertInput:
       properties:
         date:
@@ -436,14 +466,47 @@ components:
       - spend
       - spend_currency
       title: Spend Entry
-    SpendDeleteInputPayload:
+    SpendDeleteInput:
       properties:
-        data:
-          $ref: '#/components/schemas/SpendDeleteInput'
+        date:
+          type: string
+          format: date
+          title: Date
+          description: The date of spend entry to delete, required
+          examples:
+          - '1970-01-01'
+        platform_account_id:
+          type: string
+          title: Platform Account Id
+          description: The Ad Platform Account ID to delete, required
+          default: ''
+          examples:
+          - '12345'
+        campaign_id:
+          type: string
+          title: Campaign Id
+          description: The Ad Platform's Campaign ID to delete, required
+          examples:
+          - '12345'
+        adset_id:
+          type: string
+          title: Adset Id
+          description: The Ad Platform's Adset ID to delete, defaults to '' if empty
+          default: ''
+          examples:
+          - '12345'
+        ad_id:
+          type: string
+          title: Ad Id
+          description: The Ad Platform's Ad ID to delete, defaults to '' if empty
+          default: ''
+          examples:
+          - '12345'
       type: object
       required:
-      - data
-      title: Deletion Parameters Object
+      - date
+      - campaign_id
+      title: Deletion Parameters
     SpendDefaultOutput:
       properties:
         date:
@@ -557,69 +620,6 @@ components:
       - created_at
       - updated_at
       title: Spend Entry Return
-    SpendDeleteInput:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-          description: The date of spend entry to delete, required
-          examples:
-          - '1970-01-01'
-        platform_account_id:
-          type: string
-          title: Platform Account Id
-          description: The Ad Platform Account ID to delete, required
-          default: ''
-          examples:
-          - '12345'
-        campaign_id:
-          type: string
-          title: Campaign Id
-          description: The Ad Platform's Campaign ID to delete, required
-          examples:
-          - '12345'
-        adset_id:
-          type: string
-          title: Adset Id
-          description: The Ad Platform's Adset ID to delete, defaults to '' if empty
-          default: ''
-          examples:
-          - '12345'
-        ad_id:
-          type: string
-          title: Ad Id
-          description: The Ad Platform's Ad ID to delete, defaults to '' if empty
-          default: ''
-          examples:
-          - '12345'
-      type: object
-      required:
-      - date
-      - campaign_id
-      title: Deletion Parameters
-    SpendUpsertInputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendUpsertInput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries
-    SpendDefaultOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendDefaultOutput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries Return
   securitySchemes:
     api_key:
       type: apiKey

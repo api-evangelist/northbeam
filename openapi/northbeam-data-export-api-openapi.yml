@@ -73,6 +73,36 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Export_To_GCS_Bucket:
+      allOf:
+      - type: object
+        required:
+        - bucket_name
+        properties:
+          bucket_name:
+            description: Name of the external bucket where to export your file.
+            type: string
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
+            type: string
+            minLength: 3
+            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
+      - $ref: '#/components/schemas/Export_Request_Base'
+    Export_To_Northbeam_Documents:
+      allOf:
+      - type: object
+        properties:
+          export_file_name:
+            description: Name of the exported file, if not provided, default one will be used.
+            type: string
+            minLength: 3
+            pattern: ^[A-Za-z0-9_-]+$
+      - $ref: '#/components/schemas/Export_Request_Base'
+    CreateDataExport:
+      oneOf:
+      - $ref: '#/components/schemas/Export_To_Northbeam_Documents'
+      - $ref: '#/components/schemas/Export_To_GCS_Bucket'
+      - $ref: '#/components/schemas/Export_To_S3_Bucket'
     Export_Request_Base:
       type: object
       properties:
@@ -231,25 +261,6 @@ components:
       required:
       - attribution_options
       - metrics
-    Export_To_S3_Bucket:
-      allOf:
-      - type: object
-        required:
-        - aws_role
-        - region
-        properties:
-          aws_role:
-            description: AWS role ARN with access to the S3 bucket.
-            type: string
-          region:
-            description: Region of the S3 bucket.
-            type: string
-          export_file_name:
-            description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
-            type: string
-            minLength: 3
-            pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
-      - $ref: '#/components/schemas/Export_Request_Base'
     DataExportResult:
       type: object
       properties:
@@ -278,24 +289,18 @@ components:
         warn:
           description: Warning info regarding deprecated params, actions expected, etc.
           type: object
-    Export_To_Northbeam_Documents:
-      allOf:
-      - type: object
-        properties:
-          export_file_name:
-            description: Name of the exported file, if not provided, default one will be used.
-            type: string
-            minLength: 3
-            pattern: ^[A-Za-z0-9_-]+$
-      - $ref: '#/components/schemas/Export_Request_Base'
-    Export_To_GCS_Bucket:
+    Export_To_S3_Bucket:
       allOf:
       - type: object
         required:
-        - bucket_name
+        - aws_role
+        - region
         properties:
-          bucket_name:
-            description: Name of the external bucket where to export your file.
+          aws_role:
+            description: AWS role ARN with access to the S3 bucket.
+            type: string
+          region:
+            description: Region of the S3 bucket.
             type: string
           export_file_name:
             description: Name of the exported file, if not provided, default one will be used. Can include subdirectory paths (e.g., `folder/subfolder/file`).
@@ -303,11 +308,6 @@ components:
             minLength: 3
             pattern: ^(?!/)(?!.*//)[A-Za-z0-9_/-]+(?<!/)$
       - $ref: '#/components/schemas/Export_Request_Base'
-    CreateDataExport:
-      oneOf:
-      - $ref: '#/components/schemas/Export_To_Northbeam_Documents'
-      - $ref: '#/components/schemas/Export_To_GCS_Bucket'
-      - $ref: '#/components/schemas/Export_To_S3_Bucket'
   securitySchemes:
     api_key:
       type: apiKey

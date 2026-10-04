@@ -253,23 +253,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ErrorLoc:
-      properties:
-        loc:
-          type: string
-          title: Loc
-        msg:
-          type: string
-          title: Msg
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ErrorLoc
     SpendHourlyUpsertInputPayload:
       properties:
         data:
@@ -303,52 +286,6 @@ components:
       required:
       - message
       title: RequestError
-    SpendHourlyDeleteInputPayload:
-      properties:
-        data:
-          $ref: '#/components/schemas/SpendHourlyDeleteInput'
-      type: object
-      required:
-      - data
-      title: Deletion Parameters Object
-    SpendHourlyListOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
-          type: array
-          title: Data
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_count:
-          type: integer
-          title: Total Count
-      type: object
-      required:
-      - data
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      title: Spend Entries Return Metadata
-    SpendHourlyDefaultOutputPayload:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
-          type: array
-          title: Data
-      type: object
-      required:
-      - data
-      title: Spend Entries Return
     SpendHourlyDeleteInput:
       properties:
         hour_start_iso:
@@ -493,6 +430,42 @@ components:
       - spend
       - spend_currency
       title: Spend Hourly Entry
+    SpendHourlyDefaultOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: Spend Entries Return
+    SpendHourlyDeleteInputPayload:
+      properties:
+        data:
+          $ref: '#/components/schemas/SpendHourlyDeleteInput'
+      type: object
+      required:
+      - data
+      title: Deletion Parameters Object
+    ErrorLoc:
+      properties:
+        loc:
+          type: string
+          title: Loc
+        msg:
+          type: string
+          title: Msg
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ErrorLoc
     SpendHourlyDefaultOutput:
       properties:
         hour_start_iso:
@@ -606,6 +579,33 @@ components:
       - created_at
       - updated_at
       title: Spend Entry Return
+    SpendHourlyListOutputPayload:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SpendHourlyDefaultOutput'
+          type: array
+          title: Data
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_count:
+          type: integer
+          title: Total Count
+      type: object
+      required:
+      - data
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: Spend Entries Return Metadata
   securitySchemes:
     api_key:
       type: apiKey
