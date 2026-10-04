@@ -52,6 +52,7 @@ tags:
   - Advertising
   - Marketing Analytics
   - Agents
+  - Attribution
 apis:
 - aid: northbeam:mcp
   name: Northbeam MCP Server
