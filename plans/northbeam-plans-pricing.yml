@@ -117,3 +117,35 @@ x-changes-this-round: >
   a new agency-led Growth tier was added ahead of Starter — Professional carries an explicit
   $3,500/month figure, and the Professional feature line now reads "Unlimited users, data
   exports, integrations, and MCP access", making the MCP server a priced entitlement.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Growth
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Starter
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Professional
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []

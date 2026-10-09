@@ -86,3 +86,19 @@ x-evidence:
 - url: https://docs.northbeam.io/docs/connect-northbeam-to-claude.md
   http_status: 200
   fetched: '2026-08-13'
+rfc9728:
+  endpoint: https://mcp.northbeam.io
+  metadata_url: https://mcp.northbeam.io/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://mcp.northbeam.io
+    authorization_servers:
+    - https://mcp.northbeam.io
+    scopes_supported:
+    - access:mcp
+    bearer_methods_supported:
+    - header
+    resource_documentation: https://github.com/north-beam/northbeam-mcp/blob/main/docs/auth.md
