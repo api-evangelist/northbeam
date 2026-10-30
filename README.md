@@ -1,4 +1,4 @@
-# Northbeam (northbeam)
+# Northbeam
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,51 +64,156 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Northbeam is a multi-touch marketing attribution platform built for e-commerce brands that need accurate, channel-level ROAS measurement. It provides REST APIs for ingesting order data, uploading spend from non-integrated ad platforms, and exporting attribution performance metrics including revenue, transactions, CAC, and creative analytics across configurable attribution windows and models.
+Northbeam is a multi-touch marketing attribution platform for e-commerce brands. It joins first-party click and view data collected by its own browser pixel to order-level revenue and to ad spend across every channel, then reports channel, campaign, adset and ad level ROAS, CAC, AOV and creative performance under a choice of attribution models and windows. The developer surface is three REST APIs published as OpenAPI: an Orders API for pushing purchase data in as the revenue ground truth, a Spend API for uploading cost from channels Northbeam does not integrate with natively, and an asynchronous Data Export API for pulling attribution metrics back out to Northbeam documents, GCS or S3. Northbeam also runs a first-party remote MCP server at mcp.northbeam.io, OAuth-secured and read-only, which it documents as a custom connector for Claude and ChatGPT.
 
-APIs.json: https://raw.githubusercontent.com/api-evangelist/northbeam/refs/heads/main/apis.yml
+**Areas:** Marketing Attribution · Multi-Touch Attribution · E-Commerce · ROAS · Media Mix Modeling · Creative Analytics · Performance Marketing · Advertising · Marketing Analytics · Agents · Attribution
 
-Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=northbeam-api-evangelist&utm_content=repo
+## Northbeam on APIs.io
 
-## Tags
+Everything profiled for Northbeam is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/northbeam/](https://apis.io/providers/northbeam/)** — or go straight to one of the APIs or properties below.
 
-- Marketing Attribution
-- Multi-Touch Attribution
-- E-Commerce
-- ROAS
-- Media Mix Modeling
-- Creative Analytics
-- Performance Marketing
+### APIs (8)
 
-## APIs
+- [Northbeam MCP Server](https://apis.io/apis/northbeam/mcp/) — First-party remote Model Context Protocol server giving an agent read-only access to the caller's Northbeam dashboards — performance, attribution, spend and…
+- [Northbeam Attribution Models API](https://apis.io/apis/northbeam/northbeam-attribution-models-api/) — The Attribution Models API from Northbeam — 1 operation(s) for attribution models.
+- [Northbeam Breakdowns API](https://apis.io/apis/northbeam/northbeam-breakdowns-api/) — The Breakdowns API from Northbeam — 1 operation(s) for breakdowns.
+- [Northbeam Data Export API](https://apis.io/apis/northbeam/northbeam-data-export-api/) — The Data Export API from Northbeam — 2 operation(s) for data export.
+- [Northbeam Metrics API](https://apis.io/apis/northbeam/northbeam-metrics-api/) — The Metrics API from Northbeam — 1 operation(s) for metrics.
+- [Northbeam Orders API](https://apis.io/apis/northbeam/northbeam-orders-api/) — The Orders API from Northbeam — 2 operation(s) for orders.
+- [Northbeam Spend API](https://apis.io/apis/northbeam/northbeam-spend-api/) — The Spend API from Northbeam — 1 operation(s) for spend.
+- [Northbeam Spend Hourly API](https://apis.io/apis/northbeam/northbeam-spend-hourly-api/) — The Spend Hourly API from Northbeam — 1 operation(s) for spend hourly.
 
-- **Orders API** — Submit purchase and order data for attribution processing (POST, batches up to 1,000 orders)
-- **Spend API** — Upload hourly ad spend records from non-integrated channels
-- **Data Export API** — Export attribution performance metrics (revenue, transactions, CAC, AOV) across attribution models and time windows
+### Published properties
 
-## Plans / Rate Limits / FinOps
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- [Plans and Pricing](plans/northbeam-plans-pricing.yml) — Starter ($1,500/mo), Professional (custom), Enterprise (custom)
-- [Rate Limits](rate-limits/northbeam-rate-limits.yml) — Data Export: 60 req/min; reference endpoints: 100 req/sec; batch APIs: 1,000 records/call
-- [FinOps](finops/northbeam-finops.yml) — Subscription cost model; FOCUS-aligned allocation, optimization, and governance guidance
+#### MCP servers (1)
 
-## Timestamps
+Model Context Protocol servers that expose the API to agents.
 
-- Created: 2026-06-13
-- Modified: 2026-06-13
+- [Northbeam](https://apis.io/servers/northbeam/northbeam/)
 
-## Common
+#### JSON-LD (1)
 
-| Type | URL |
-|------|-----|
-| Website | https://www.northbeam.io |
-| Documentation | https://docs.northbeam.io |
-| GitHub Org | https://github.com/north-beam |
-| LinkedIn | https://www.linkedin.com/company/northbeam |
-| Blog | https://www.northbeam.io/blog |
-| Pricing | https://www.northbeam.io/pricing |
-| X | https://x.com/northbeam |
+Linked-data contexts for the provider's vocabulary.
 
-## Maintainers
+- [Northbeam Context](https://apis.io/jsonld/northbeam/northbeam-context/)
 
-- **Kin Lane** — kin@apievangelist.com
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Northbeam API Vocabulary](https://apis.io/vocabularies/northbeam/northbeam-vocabulary/)
+
+#### Overlays (11)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Northbeam Attribution Models Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-attribution-models-api-phrasing-overlay/)
+- [Northbeam Breakdowns Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-breakdowns-api-phrasing-overlay/)
+- [Northbeam Data Export Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-data-export-api-phrasing-overlay/)
+- [Northbeam Data Export V1 Overlay](https://apis.io/overlays/northbeam/northbeam-data-export-v1-overlay/)
+- [Northbeam Metrics Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-metrics-api-phrasing-overlay/)
+- [Northbeam Orders Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-orders-api-phrasing-overlay/)
+- [Northbeam Orders V1 Overlay](https://apis.io/overlays/northbeam/northbeam-orders-v1-overlay/)
+- [Northbeam Orders V2 Overlay](https://apis.io/overlays/northbeam/northbeam-orders-v2-overlay/)
+- [Northbeam Spend Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-spend-api-phrasing-overlay/)
+- [Northbeam Spend Hourly Api Phrasing Overlay](https://apis.io/overlays/northbeam/northbeam-spend-hourly-api-phrasing-overlay/)
+- [Northbeam Spend V1 Overlay](https://apis.io/overlays/northbeam/northbeam-spend-v1-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Northbeam Authentication](https://apis.io/security/northbeam/northbeam-authentication/)
+- [Northbeam Domain Security](https://apis.io/security/northbeam/northbeam-domain-security/)
+- [Northbeam Trust Center](https://apis.io/security/northbeam/northbeam-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Northbeam Plans Pricing](https://apis.io/plans/northbeam/northbeam-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Northbeam Rate Limits](https://apis.io/rate-limits/northbeam/northbeam-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Northbeam Finops](https://apis.io/finops/northbeam/northbeam-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.northbeam.io)
+- [Documentation](https://docs.northbeam.io)
+- [Getting started](https://docs.northbeam.io/docs/getting-started)
+- [API reference](https://docs.northbeam.io/reference)
+- [Pricing](https://www.northbeam.io/pricing)
+- [Sign up](https://www.northbeam.io/demo)
+- [Support](https://www.northbeam.io/submit-a-support-ticket)
+- [Blog](https://www.northbeam.io/blog)
+- [Compliance](https://www.northbeam.io/data-security)
+- [Terms of service](https://www.northbeam.io/terms-conditions)
+- [Privacy policy](https://www.northbeam.io/privacy)
+
+## API Evangelist rating
+
+**Kin Score 65.2** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 55.9 |
+| Contract governance | 31.8 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 55.4 |
+| Access clarity | 92.1 |
+
+**Agent readiness 57.7** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 39.2** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/northbeam/](https://apis.io/providers/northbeam/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Northbeam: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/northbeam/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
